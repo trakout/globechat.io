@@ -4,10 +4,9 @@ var fs = require('fs')
 , url = require("url")
 , uuidGen = require('node-uuid');
 
-
 var socketServer;
-var CHAT_ROOMS = [];
-var USERS_SOCKET_IDS = [];
+var CHAT_ROOMS = {};
+var USER_SOCKET_OBJECTS = {};
 
 // handle contains locations to browse to (vote and poll); pathnames.
 function startServer(route,handle,debug)
@@ -50,31 +49,31 @@ function initSocketIO(httpServer,debug)
 
         socket.on('disconnect', function(){
 
-            // remove user from the list of user online
-            for (var i=0; i< USERS_SOCKET_IDS.length; ++i) {
-                if (USERS_SOCKET_IDS[i] == socket.id) {
-                    USERS_SOCKET_IDS.splice(i, 1);
-                }
-            }
+            delete USER_SOCKET_OBJECTS[socket.id];
+
             updateUsersWithOnlineUsers();
             console.log('user disconnected');
         });
 
         socket.on('acceptChatRequest', function (userId) {
-            console.log('starting chat between '+userId+' and'+socket.id);
+            console.log('starting chat between '+userId+' and '+socket.id);
+
+            var roomId = createRoom(socket.id, userId);
             socketServer.to(userId).emit('startChat', socket.id);
             socketServer.to(socket.id).emit('startChat', userId);
         });
 
         socket.on('chatMessage', function(msg){
-            console.log('message: ' + msg);
             // send the message to everyone in the room
             socketServer.to('some-unqiue-room-id').emit('chatMessage', msg);
         });
 
         socket.on('sendChatRequest', function(userId) {
-            console.log("sending chat request to:" + userId);
-            socket.broadcast.to(userId).emit('receiveChatRequest', socket.id);
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            if (userObject) {
+                console.log(socket.id+" sending chat request to:" + userObject.id);    
+                socket.broadcast.to(userId).emit('receiveChatRequest', userObject);
+            }
         });
 
         // socket.emit('onconnection', {pollOneValue:sendData});
@@ -113,16 +112,45 @@ function initSocketIO(httpServer,debug)
 }
 
 function keepTrackOfSocket(socket) {
-    if (USERS_SOCKET_IDS.indexOf(socket.id) != -1) {
+
+    if (USER_SOCKET_OBJECTS[socket.id]) {
         return;
     }
 
-    USERS_SOCKET_IDS.push(socket.id);
-    console.log(USERS_SOCKET_IDS);
+    var userObject = {};
+    userObject.id = socket.id;
+    userObject.name = "name_" + uuidGen.v4();
+    userObject.inRoom = [];
+
+    USER_SOCKET_OBJECTS[socket.id] = userObject;
+    console.log(userObject);
 }
 
 function updateUsersWithOnlineUsers() {
-    socketServer.emit('listOfUsersOnline', USERS_SOCKET_IDS);
+    socketServer.emit('listOfUsersOnline', USER_SOCKET_OBJECTS);
+}
+
+function createRoom(user1, user2) {
+
+    var roomId = uuidGen.v4();
+    console.log("creating room: " + roomId);
+    var roomObject = {};
+    roomObject.id = roomId;
+
+    var user1Socket = socketServer.sockets.connected[user1];
+    var user2Socket = socketServer.sockets.connected[user2];
+
+    var userObject1 = USER_SOCKET_OBJECTS[user1];
+    var userObject2 = USER_SOCKET_OBJECTS[user2];
+
+    if (user1Socket && user2Socket && userObject1 && userObject2) {
+        user1Socket.join(roomId);
+        user2Socket.join(roomId);
+        roomObject.users = [USER_SOCKET_OBJECTS[user1], USER_SOCKET_OBJECTS[user2]];
+        userObject1.inRoom.push(roomId);
+        userObject2.inRoom.push(roomId);
+        CHAT_ROOMS[roomId] = roomObject;
+    }
 }
 
 exports.start = startServer;
