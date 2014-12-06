@@ -3,8 +3,6 @@
 curl http://localhost:18081/user_info/209.29.24.147
 ```
 
-Here, en is the from language; de is the to language; "hello world" is the string to be converted
-
 Response will look like this:
 ```
 {
