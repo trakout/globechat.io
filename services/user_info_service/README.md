@@ -12,6 +12,14 @@ Response will look like this:
     "country": "Canada"
 }
 ```
+If city is not found, you could get something like this:
+```
+{
+    "city": "",
+    "country": "Thailand"
+}
+```
+
 
 ##How to start
 python main.py
