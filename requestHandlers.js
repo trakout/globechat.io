@@ -36,15 +36,105 @@ function sendModernizr(response) {
 }
 
 // fonts
-// function sendFontCamptonLightTtf(response) {
-// 	console.log('===');
-// 	console.log(response);
-// 	console.log('===');
-// 	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
-// 	var font = fs.readFileSync(__dirname + "/pages/style/font/")
-// 	response.end(font);
-// }
+function sendFontCamptonBoldEot(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-bold-webfont.eot")
+	response.end(font);
+}
+function sendFontCamptonBoldSvg(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-bold-webfont.svg")
+	response.end(font);
+}
+function sendFontCamptonBoldTtf(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-bold-webfont.ttf")
+	response.end(font);
+}
+function sendFontCamptonBoldWoff(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-bold-webfont.woff")
+	response.end(font);
+}
+function sendFontCamptonBoldWoffDos(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-bold-webfont.woff2")
+	response.end(font);
+}
+function sendFontCamptonLightEot(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-light-webfont.eot")
+	response.end(font);
+}
+function sendFontCamptonLightSvg(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-light-webfont.svg")
+	response.end(font);
+}
+function sendFontCamptonLightTtf(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-light-webfont.ttf")
+	response.end(font);
+}
+function sendFontCamptonLightWoff(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-light-webfont.woff")
+	response.end(font);
+}
+function sendFontCamptonLightWoffDos(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/campton-light-webfont.woff2")
+	response.end(font);
+}
+function sendFontAwesomeEot(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/fontawesome-webfont.eot")
+	response.end(font);
+}
+function sendFontAwesomeSvg(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/fontawesome-webfont.svg")
+	response.end(font);
+}
+function sendFontAwesomeTtf(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/fontawesome-webfont.ttf")
+	response.end(font);
+}
+function sendFontAwesomeWoff(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var font = fs.readFileSync(__dirname + "/pages/style/font/fontawesome-webfont.woff")
+	response.end(font);
+}
 
+function sendIco(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var ico = fs.readFileSync(__dirname + "/pages/img/favicon.ico")
+	response.end(ico);
+}
+function sendMobile(response) {
+	response.writeHead(200, {"Content-Type": "application/x-font-opentype"});
+	var mobile = fs.readFileSync(__dirname + "/pages/img/apple-touch-icon-precomposed.png")
+	response.end(mobile);
+}
+
+exports.sendIco = sendIco;
+exports.sendMobile = sendMobile;
+
+exports.sendFontCamptonBoldEot = sendFontCamptonBoldEot;
+exports.sendFontCamptonBoldSvg = sendFontCamptonBoldSvg;
+exports.sendFontCamptonBoldTtf = sendFontCamptonBoldTtf;
+exports.sendFontCamptonBoldWoff = sendFontCamptonBoldWoff;
+exports.sendFontCamptonBoldWoffDos = sendFontCamptonBoldWoffDos;
+exports.sendFontCamptonLightEot = sendFontCamptonLightEot;
+exports.sendFontCamptonLightSvg = sendFontCamptonLightSvg;
+exports.sendFontCamptonLightTtf = sendFontCamptonLightTtf;
+exports.sendFontCamptonLightWoff = sendFontCamptonLightWoff;
+exports.sendFontCamptonLightWoffDos = sendFontCamptonLightWoffDos;
+exports.sendFontAwesomeEot = sendFontAwesomeEot;
+exports.sendFontAwesomeSvg = sendFontAwesomeSvg;
+exports.sendFontAwesomeTtf = sendFontAwesomeTtf;
+exports.sendFontAwesomeWoff = sendFontAwesomeWoff;
 
 exports.sendInterface = sendInterface;
 exports.sendMainCss = sendMainCss;
