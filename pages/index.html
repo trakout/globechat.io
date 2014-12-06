@@ -40,11 +40,19 @@
 
 	<h1>GlobeChat!!</h1>
 
-	<h3>Transcript here:</h3>
-	<ul id="conversationTranscript"></ul>
-	<form action="">
-		<input id="messageInput" autocomplete="off" /><button>Send</button>
-	</form>
+	<div id="conversationSection">
+		<h3>Transcript here:</h3>
+		<ul id="conversationTranscript"></ul>
+		<form action="">
+			<input id="messageInput" autocomplete="off" /><button>Send</button>
+		</form>
+	</div>
+
+	<h3>Online users (click to send request):</h3>
+	<ul id="onlineUsers"></ul>
+
+	<h3>Chat requests (click to start chat):</h3>
+	<ul id="chatRequests"></ul>
 
 	<script src="/socket.io/socket.io.js"></script>
 
@@ -52,19 +60,76 @@
 	<script src="main.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
-		var socket = io();
-		$('form').submit(function(){
 
-			// send to the server the message
-			socket.emit('chatMessage', $('#messageInput').val());
-				$('#messageInput').val('');
-			return false;
-		});
+		$(document).ready(function() {
+			$('#conversationSection').hide();
 
-		// recieved message
-		socket.on('chatMessage', function(msg){
-			$('#conversationTranscript').append($('<li>').text(msg));
-		});
+			/*************************************************************************************
+
+			* BUTTON HANDLER RELATED STUFF
+
+			*************************************************************************************/
+
+			$('#onlineUsers').on('click','li.onlineUser',function() {    
+				requestToChatWithUser($(this).data("user-id"));
+			});
+
+			$('#chatRequests').on('click','li.chatRequest',function() {    
+				console.log($(this).data("user-id"));
+				acceptChatRequest($(this).data("user-id"));
+			});
+
+			/*************************************************************************************
+
+			* SOCKET RELATED STUFF
+
+			*************************************************************************************/
+			var socket = io();
+			$('form').submit(function(){
+
+				// send to the server the message
+				socket.emit('chatMessage', $('#messageInput').val());
+					$('#messageInput').val('');
+				return false;
+			});
+
+			// recieved message
+			socket.on('chatMessage', function(msg){
+				$('#conversationTranscript').append($('<li>').text(msg));
+			});
+
+			socket.on('startChat', function () {
+				console.log('starting chat');
+				$('#conversationSection').show();
+			});
+
+			socket.on('receiveChatRequest', function (userObject) {
+				console.log("recieved: "+ userObject);
+				$('#chatRequests').append('<li class="chatRequest" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
+			});
+
+			// recieved a list of people online
+			// NOTE: this will probably be a list of objects later, right now it is strings
+			socket.on('listOfUsersOnline', function(userArray) {
+
+				// refresh the list of online users
+				$('#onlineUsers').empty();
+				var keys = Object.keys(userArray);
+				for (var i=0; i<keys.length; ++i) {
+					var userObject = userArray[keys[i]];
+					$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
+				}
+			});
+
+			function requestToChatWithUser(userId) {
+				socket.emit('sendChatRequest', userId);
+			}
+
+			function acceptChatRequest(userId) {
+				socket.emit('acceptChatRequest', userId);
+			}
+		}); 
+
 	</script>
 </body>
 </html>

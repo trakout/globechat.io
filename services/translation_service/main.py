@@ -10,7 +10,6 @@ YANDEX_URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key={0}&la
 
 def get_info_from_yandex(source_lang, dest_lang, string):
     url = YANDEX_URL.format(API_KEY, source_lang, dest_lang, string)
-    print url
     yandex_request = urllib2.urlopen(url)
     data = yandex_request.read()
     return data
