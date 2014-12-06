@@ -3,19 +3,17 @@
 curl http://localhost:18080/en/de?string=hello%20world
 ```
 
-here, en is the from language
-de is the to language
-"hello world" is the string to be converted
+Here, en is the from language; de is the to language; "hello world" is the string to be converted
 
 Response will look like this:
 ```
 {"code":200,"lang":"en-de","text":["Hallo Welt"]}
 ```
 
-##How to start:
+##How to start
 python main.py
 
-##Dependencies:
+##Dependencies
 * bottle
 
 ##Supported languages
