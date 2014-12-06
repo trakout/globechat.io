@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			
+			var rec = new webkitSpeechRecognition();
+			rec.continuous = true; 
+			rec.interimResults = true;
+			rec.lang = 'en-CA';
+			
+			rec.onresult = function(e) {
+				for (var i = e.resultIndex; i < e.results.length; ++i) { 
+					if (e.results[i].isFinal) { 
+						console.log('Jason: ' + e.results[i]['0'].transcript.trim());
+					}
+				}
+			}
+			
+			rec.onstart = function () {
+				console.log('Video Transcript..');
+			}
+			
+			rec.onerror = function(event) {
+				console.log('Error ' + event.error);
+				// rec.start();    // I added it here, because I think it dies after there is an error, or I might just have slow internet
+			}
+			
+			rec.start();
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<title>
+			Team Banana Stand
+		</title>
+	</head>
+	<body>
+	</body>
+</html>
