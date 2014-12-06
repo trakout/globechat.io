@@ -2576,4 +2576,8 @@ body {
   width: 130px;
 }
 
+.hidden {
+  display: none;
+}
+
 /*# sourceMappingURL=main.css.map */
