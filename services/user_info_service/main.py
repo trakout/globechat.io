@@ -32,7 +32,7 @@ def get_weather(location_details, user_information):
             print "data[main] not found"
             print data
 
-        if 'weather' in data and len(data['weather']) > 1 and 'main' in data['weather'][0]:
+        if 'weather' in data and len(data['weather']) > 0 and 'main' in data['weather'][0]:
             user_information['weather'] = data['weather'][0]['main']
         else:
             print "data[weather] has missing details"
