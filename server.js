@@ -17,7 +17,7 @@ function startServer(route,handle,debug)
         // in route.js to handle (var content), if it matches the a page will 
         // come up. Otherwise a 404 will be given. 
         var pathname = url.parse(request.url).pathname; 
-        console.log("Request for " + pathname + " received");
+        // console.log("Request for " + pathname + " received");
         var content = route(handle,pathname,response,request,debug);
     }
     
@@ -30,8 +30,6 @@ function startServer(route,handle,debug)
     initSocketIO(httpServer,debug);
 }
 
-
-
 function initSocketIO(httpServer,debug)
 {
     socketServer = socketio.listen(httpServer);
@@ -39,7 +37,21 @@ function initSocketIO(httpServer,debug)
         socketServer.set('log level', 1); // socket IO debug off
     }
     socketServer.on('connection', function (socket) {
-        // console.log("user connected");
+        console.log("user connected");
+
+        // make the socket join a unique room
+        socket.join('some-unqiue-room-id');
+
+        socket.on('disconnect', function(){
+            console.log('user disconnected');
+        });
+
+        socket.on('chatMessage', function(msg){
+            console.log('message: ' + msg);
+            // send the message to everyone in the room
+            socketServer.to('some-unqiue-room-id').emit('chatMessage', msg);
+        });
+
         // socket.emit('onconnection', {pollOneValue:sendData});
     
         // socketServer.on('update', function(data) {
