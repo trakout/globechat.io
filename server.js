@@ -64,8 +64,13 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('chatMessage', function(msg){
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            var rooms = userObject.inRoom;
+            if (rooms) {
+                socketServer.to(rooms).emit('chatMessage', msg);    
+            }
             // send the message to everyone in the room
-            socketServer.to('some-unqiue-room-id').emit('chatMessage', msg);
+            
         });
 
         socket.on('sendChatRequest', function(userId) {
@@ -142,6 +147,7 @@ function createRoom(user1, user2) {
 
     var userObject1 = USER_SOCKET_OBJECTS[user1];
     var userObject2 = USER_SOCKET_OBJECTS[user2];
+
 
     if (user1Socket && user2Socket && userObject1 && userObject2) {
         user1Socket.join(roomId);

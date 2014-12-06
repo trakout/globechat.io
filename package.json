@@ -6,8 +6,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    
     "node-uuid": "^1.4.2",
-    "socket.io": "*"
+    "socket.io": "*",
+    "pm2": "*"
   },
   "devDependencies": {
     "gulp": "^3.8.10",

@@ -8,8 +8,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>GlobeChat</title>
 
-	<meta name="keywords" content="">
-	<meta name="description" content="">
+	<meta name="keywords" content="GlobeChat: Talk the Talk">
+	<meta name="description" content="Speak with friends and strangers alike from all borders of the world. Language is not a border.">
 
 	<meta name="viewport" content="width=1024">
 
@@ -42,7 +42,7 @@
 
 	<h1>GlobeChat!!</h1>
 
-	<div id="conversationSection" class="hidden">
+	<div id="conversationSection">
 		<h3>Transcript here:</h3>
 		<ul id="conversationTranscript"></ul>
 		<form action="">
@@ -64,6 +64,8 @@
 	<script>
 
 		$(document).ready(function() {
+			$('#conversationSection').hide();
+
 			/*************************************************************************************
 
 			* BUTTON HANDLER RELATED STUFF
