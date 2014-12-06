@@ -16,6 +16,12 @@ python main.py
 ##Dependencies
 * bottle
 
+##How to install dependencies on mac
+```
+easy_install pip
+pip install bottle
+```
+
 ##Supported languages
 * "ar": "Arabic",
 * "az": "Azerbaijani",
