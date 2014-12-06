@@ -1,12 +1,13 @@
 var fs = require('fs')
 , http = require('http')
 , socketio = require('socket.io')
-, url = require("url");
+, url = require("url")
+, uuidGen = require('node-uuid');
 
 
 var socketServer;
-
-
+var CHAT_ROOMS = [];
+var USERS_SOCKET_IDS = [];
 
 // handle contains locations to browse to (vote and poll); pathnames.
 function startServer(route,handle,debug)
@@ -39,17 +40,41 @@ function initSocketIO(httpServer,debug)
     socketServer.on('connection', function (socket) {
         console.log("user connected");
 
+        keepTrackOfSocket(socket);
+
         // make the socket join a unique room
         socket.join('some-unqiue-room-id');
 
+        // tell everyone the updated list of users online
+        updateUsersWithOnlineUsers();
+
         socket.on('disconnect', function(){
+
+            // remove user from the list of user online
+            for (var i=0; i< USERS_SOCKET_IDS.length; ++i) {
+                if (USERS_SOCKET_IDS[i] == socket.id) {
+                    USERS_SOCKET_IDS.splice(i, 1);
+                }
+            }
+            updateUsersWithOnlineUsers();
             console.log('user disconnected');
+        });
+
+        socket.on('acceptChatRequest', function (userId) {
+            console.log('starting chat between '+userId+' and'+socket.id);
+            socketServer.to(userId).emit('startChat', socket.id);
+            socketServer.to(socket.id).emit('startChat', userId);
         });
 
         socket.on('chatMessage', function(msg){
             console.log('message: ' + msg);
             // send the message to everyone in the room
             socketServer.to('some-unqiue-room-id').emit('chatMessage', msg);
+        });
+
+        socket.on('sendChatRequest', function(userId) {
+            console.log("sending chat request to:" + userId);
+            socket.broadcast.to(userId).emit('receiveChatRequest', socket.id);
         });
 
         // socket.emit('onconnection', {pollOneValue:sendData});
@@ -87,5 +112,17 @@ function initSocketIO(httpServer,debug)
     });
 }
 
+function keepTrackOfSocket(socket) {
+    if (USERS_SOCKET_IDS.indexOf(socket.id) != -1) {
+        return;
+    }
+
+    USERS_SOCKET_IDS.push(socket.id);
+    console.log(USERS_SOCKET_IDS);
+}
+
+function updateUsersWithOnlineUsers() {
+    socketServer.emit('listOfUsersOnline', USERS_SOCKET_IDS);
+}
 
 exports.start = startServer;
