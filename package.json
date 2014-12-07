@@ -8,7 +8,8 @@
   "dependencies": {
     "node-uuid": "^1.4.2",
     "socket.io": "*",
-    "pm2": "*"
+    "pm2": "*",
+    "node-dogstatsd": "0.0.5"
   },
   "devDependencies": {
     "connect-livereload": "^0.5.2",
