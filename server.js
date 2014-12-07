@@ -74,6 +74,7 @@ function initSocketIO(httpServer,debug)
         socket.on('chatMessage', function(msg){
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             var rooms = userObject.inRoom;
+            msg = userObject.name + ": " + msg;
             if (rooms) {
                 socketServer.to(rooms).emit('chatMessage', msg);    
             }
