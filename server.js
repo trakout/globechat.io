@@ -51,7 +51,11 @@ function initSocketIO(httpServer,debug)
 
         socket.on('disconnect', function(){
 
+            destroyUsersRoom(USER_SOCKET_OBJECTS[socket.id], false);
             delete USER_SOCKET_OBJECTS[socket.id];
+            // TODO: also delete them from any chatrooms
+            console.log("xxxManu CHAT ROOMS: " + JSON.stringify(CHAT_ROOMS));
+            console.log("xxxManu USER_SOCKET_OBJECTS: " + JSON.stringify(USER_SOCKET_OBJECTS));
 
             updateUsersWithOnlineUsers();
             console.log('user disconnected');
@@ -71,10 +75,10 @@ function initSocketIO(httpServer,debug)
 
         socket.on('chatMessage', function(msg){
             var userObject = USER_SOCKET_OBJECTS[socket.id];
-            var rooms = userObject.inRoom;
             msg = userObject.name + ": " + msg;
-            if (rooms) {
-                socketServer.to(rooms).emit('chatMessage', msg);    
+            if ("inRoom" in userObject) {
+                var room = userObject.inRoom;
+                socketServer.to([room]).emit('chatMessage', msg);
             }
             // send the message to everyone in the room
             
@@ -98,11 +102,12 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('sendSessionDescription', function(sessionDescription) {
+            // TODO: Fix this!
             var userObject = USER_SOCKET_OBJECTS[socket.id];
-            var rooms = userObject.inRoom;
-
-            if (rooms.length > 0) {
-                var currentRoom = CHAT_ROOMS[rooms[0]];
+            
+            if ('inRoom' in userObject) {
+                var room = userObject.inRoom
+                var currentRoom = CHAT_ROOMS[room];
                 var currentUserObject;
                 for (var i=0; i<currentRoom.users.length; ++i) {
                     currentUserObject = currentRoom.users[i];
@@ -115,11 +120,12 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('sendCandidateEvent', function(candidateEvent) {
+            // TODO: Fix this!
             var userObject = USER_SOCKET_OBJECTS[socket.id];
-            var rooms = userObject.inRoom;
-
-            if (rooms.length > 0) {
-                var currentRoom = CHAT_ROOMS[rooms[0]];
+            
+            if ('inRoom' in userObject) {
+                var room = userObject.inRoom
+                var currentRoom = CHAT_ROOMS[room];
                 var currentUserObject;
                 for (var i=0; i<currentRoom.users.length; ++i) {
                     currentUserObject = currentRoom.users[i];
@@ -175,7 +181,7 @@ function keepTrackOfSocket(socket) {
     var userObject = {};
     userObject.id = socket.id;
     userObject.name = "name_" + uuidGen.v4();
-    userObject.inRoom = [];
+    // userObject.inRoom = "[]";
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
     console.log(userObject);
@@ -184,6 +190,31 @@ function keepTrackOfSocket(socket) {
 
 function updateUsersWithOnlineUsers() {
     socketServer.emit('listOfUsersOnline', USER_SOCKET_OBJECTS);
+}
+
+function destroyUsersRoom(userObject, userIsConnected) {
+    if ('inRoom' in userObject) {
+        var roomKey = userObject.inRoom;
+        var users = CHAT_ROOMS[roomKey].users;
+        var userSocket = null;
+
+        if (userIsConnected) {
+            userSocket = socketServer.sockets.connected[userObject.id];
+            userSocket.leave(roomKey)
+        }
+
+        for (var i=0; i<users.length; ++i) {
+            var otherUser = users[i];
+            if (otherUser.id != userObject.id) {
+                userSocket = socketServer.sockets.connected[otherUser.id]
+                //TODO: notify other user that he has been disconnected
+                delete otherUser['inRoom']
+                userSocket.leave(roomKey)
+            }
+        }
+
+        delete CHAT_ROOMS[roomKey]
+    }
 }
 
 function createRoom(user1, user2, callback) {
@@ -215,8 +246,12 @@ function createRoom(user1, user2, callback) {
             user1Socket.join(roomId);
             user2Socket.join(roomId);
             roomObject.users = [USER_SOCKET_OBJECTS[user1], USER_SOCKET_OBJECTS[user2]];
-            userObject1.inRoom.push(roomId);
-            userObject2.inRoom.push(roomId);
+
+            destroyUsersRoom(userObject1, true)
+            destroyUsersRoom(userObject2, true)
+
+            userObject1.inRoom = roomId;
+            userObject2.inRoom = roomId;
             CHAT_ROOMS[roomId] = roomObject;
         }
 
