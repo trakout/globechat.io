@@ -42,11 +42,15 @@
 
 	<h1>GlobeChat!!</h1>
 
+	<form id="changeNameForm" action="">
+		<input id="usernameInput" autocomplete="off" /><button>Change Name</button>
+	</form>
+
 	<video id="localVideo" width="320" height="240" autoplay></video>  
 	<div id="conversationSection">
 		<h3>Transcript here:</h3>
 		<ul id="conversationTranscript"></ul>
-		<form action="">
+		<form id="conversationForm" action="">
 			<input id="messageInput" autocomplete="off" /><button>Send</button>
 		</form>
 	</div>
@@ -113,11 +117,18 @@
 
 			*************************************************************************************/
 			var socket = io();
-			$('form').submit(function(){
+			$('#conversationForm').submit(function(){
 
 				// send to the server the message
 				socket.emit('chatMessage', $('#messageInput').val());
 					$('#messageInput').val('');
+				return false;
+			});
+
+			$('#changeNameForm').submit(function(){
+
+				// send to the server the message
+				socket.emit('changeName', $('#usernameInput').val());
 				return false;
 			});
 
@@ -142,6 +153,7 @@
 
 			socket.on('updatedUserObject', function (userObject) {
 				_userObject = userObject;
+				$('#usernameInput').val(userObject.name);
 			});
 
 			// recieved a list of people online

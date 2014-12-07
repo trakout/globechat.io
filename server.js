@@ -88,6 +88,15 @@ function initSocketIO(httpServer,debug)
             }
         });
 
+        socket.on('changeName', function(name) {
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            if (userObject) {
+                userObject.name = name;
+                console.log(name);
+                updateUsersWithOnlineUsers();
+            }
+        });
+
         socket.on('sendSessionDescription', function(sessionDescription) {
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             var rooms = userObject.inRoom;
