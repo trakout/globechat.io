@@ -35,27 +35,39 @@
 <![endif]-->
 
 	<div class="container chat-contain">
-		<div class="chat">
-			<div class="recipient">
-				<div class="viewer"></div>
-			</div><!-- recipient -->
+		<div class="chat-parent">
+			<div class="chat">
+				<div class="recipient">
+					<div id="videoPublish" class="videoPublish"></div>
+					<div class="viewer"></div>
+				</div><!-- recipient -->
 
-			<div class="text-area">
-				<div class="text-history">
+				<div class="text-area">
+					<div class="text-history">
 
-				</div><!-- text-history -->
-				<div class="text-submit">
-					<textarea onkeyup="autoResize(event)" onkeydown="autoResize(event)"></textarea>
-				</div><!-- text-submit -->
-				<div class="text-button">
-					<div class="button-content">
-						Send<br>
-						<i class="fa fa-share"></i>
+						<div id="conversationSection">
+							<h3>Transcript here:</h3>
+							<ul id="conversationTranscript"></ul>
+							<form id="conversationForm" action="">
+								<input id="messageInput" autocomplete="off" /><button>Send</button>
+							</form>
+						</div>
+
+
+					</div><!-- text-history -->
+					<div class="text-submit">
+						<textarea onkeyup="autoResize(event)" onkeydown="autoResize(event)"></textarea>
+					</div><!-- text-submit -->
+					<div class="text-button">
+						<div class="button-content">
+							Send<br>
+							<i class="fa fa-share"></i>
+						</div>
 					</div>
-				</div>
-			</div><!-- text-area -->
-			
-		</div><!-- chat -->
+				</div><!-- text-area -->
+				
+			</div><!-- chat -->
+		</div>
 	</div>
 
 	<script src="plugins.js"></script>
