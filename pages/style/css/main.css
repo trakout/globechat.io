@@ -2564,7 +2564,7 @@ td {
   font-style: normal;
 }
 body {
-  background: #3F4B59;
+  background: #F2E3D0;
   height: 100%;
   width: 100%;
   font-family: "camptonlight", Helvetica, Arial, sans-serif;
@@ -2572,8 +2572,9 @@ body {
 
 .logo {
   position: relative;
-  height: 130px;
-  width: 130px;
+  display: block;
+  margin: 20px auto;
+  width: 200px;
 }
 
 .hidden {
@@ -2592,6 +2593,27 @@ body {
   background: green;
   float: left;
   margin: 45px;
+  position: relative;
+  overflow: hidden;
+}
+.user-content img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.user-content span {
+  background: #3F4B59;
+  position: absolute;
+  width: 100%;
+  height: 30%;
+  top: 100%;
+  z-index: 999;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+.user-content:hover span {
+  top: 70%;
 }
 
 /*# sourceMappingURL=main.css.map */

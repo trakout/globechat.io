@@ -34,13 +34,10 @@
 	</style>
 <![endif]-->
 
-	
+	<!--Main Page -->
+	<div class="container">
+		<img src="logo_globe.png" class="logo">
 
-	<div class="logo">
-		<i class="fa fa-globe fa-5x"></i>
-	</div>
-
-	<h1>GlobeChat!!</h1>
 
 	<form id="changeNameForm" action="">
 		<input id="usernameInput" autocomplete="off" /><button>Change Name</button>
@@ -54,12 +51,43 @@
 			<input id="messageInput" autocomplete="off" /><button>Send</button>
 		</form>
 	</div>
-
+	<!--dd-->
 	<h3>Online users (click to send request):</h3>
 	<ul id="onlineUsers"></ul>
 
 	<h3>Chat requests (click to start chat):</h3>
 	<ul id="chatRequests"></ul>
+
+
+
+		<div class="user-content">
+			<img src="image-1_globe.png">
+			<span>chat</span>
+		</div>
+		<div class="user-content">
+			<img src="image-4_globe.png">
+			<span>chat</span>
+		</div>
+		<div class="user-content">
+			<img src="image-2_globe.png">
+			<span>chat</span>
+		</div>
+		<div class="user-content">
+			<img src="image-5_globe.png">
+			<span>chat</span>
+		</div>
+		<div class="user-content">
+			<img src="image-3_globe.png">
+			<span>chat</span>
+		</div>
+		<div class="user-content">
+			<img src="image-6_globe.png">
+			<span>chat</span>
+		</div>
+
+
+	<script src="/socket.io/socket.io.js"></script>
+
 
 	<script src="plugins.js"></script>
 	<script src="main.js"></script>
