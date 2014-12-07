@@ -12,6 +12,7 @@ IP_TO_CITY_API_URL = "http://ip-api.com/json/{0}"
 WEATHER_API_LAT_LON_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}"
 WEATHER_API_CITY_URL = "http://api.openweathermap.org/data/2.5/weather?q={0}"
 TIME_URL = "https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&key={3}"
+WEATHER_ICON_URL = "http://openweathermap.org/img/w/{0}.png"
 
 def convert_kelvin_to_celsius(kelvin):
     return kelvin - 273.15
@@ -38,9 +39,10 @@ def get_weather(location_details, user_information):
             print "data[main] not found"
             print data
 
-        if 'weather' in data and len(data['weather']) > 0 and 'description' in data['weather'][0] and 'id' in data['weather'][0]:
+        if 'weather' in data and len(data['weather']) > 0 and 'description' in data['weather'][0] and 'id' in data['weather'][0] and 'icon' in data['weather'][0]:
             user_information['weather'] = data['weather'][0]['description']
             user_information['weather_id'] = data['weather'][0]['id']
+            user_information['icon'] = WEATHER_ICON_URL.format(data['weather'][0]['icon'])
         else:
             print "data[weather] has missing details"
             print data

@@ -7,11 +7,12 @@ Response will look like this:
 ```
 {
     "city": "Toronto",
-    "temperature": -1.9099999999999682,
+    "temperature": -3.769999999999982,
     "country": "Canada",
-    "weather_id": 800,
-    "weather": "sky is clear",
-    "local_time": "2014-12-07 14:21:31"
+    "weather_id": 803,
+    "weather": "broken clouds",
+    "local_time": "2014-12-07 18:09:58",
+    "icon": "http://openweathermap.org/img/w/04n.png"
 }
 ```
 The weather_id corresponds to the codes found on [this page](http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes)
