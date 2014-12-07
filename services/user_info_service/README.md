@@ -7,11 +7,14 @@ Response will look like this:
 ```
 {
     "city": "Toronto",
-    "weather": "Clouds",
-    "temperature": 3.7100000000000364,
+    "weather": "few clouds",
+    "temperature": 3.1200000000000045,
+    "weather_id": 801,
     "country": "Canada"
 }
 ```
+The weather_id corresponds to the codes found on [this page](http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes)
+
 If city is not found, you could get something like this:
 ```
 {
