@@ -13,7 +13,7 @@ var rtc;
 var CHAT_ROOMS = {};
 var USER_SOCKET_OBJECTS = {};
 
-// handle contains locations to browse to (vote and poll); pathnames.
+// handle contains locations to browse to pathnames.
 function startServer(route,handle,debug)
 {
     // on request event
@@ -27,9 +27,7 @@ function startServer(route,handle,debug)
     }
     
     var httpServer = http.createServer(onRequest).listen(1200, function(){
-        console.log("Listening at: http://localhost:1200");
-        console.log("Server is up");
-
+        console.log("Server is up at: http://localhost:1200");
     }); 
 
     opentok = new OpenTok("45102212", "b8fb8686a89bebab70b8f2be91b503f04d64ee14");
