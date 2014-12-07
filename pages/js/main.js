@@ -22,6 +22,12 @@ function runSocket() {
 		acceptChatRequest($(this).data("user-id"));
 	});
 
+	$('#userLanguage').on('change', function (e) {
+		var optionSelected = $(this).find("option:selected");
+		var valueSelected  = optionSelected.val();
+		changeUserLanguage(valueSelected);
+});
+
 	/*************************************************************************************
 
 	* SPEECH RECOGNITION RELATED STUFF
@@ -33,12 +39,13 @@ function runSocket() {
 		_rec = new webkitSpeechRecognition();
 		_rec.continuous = true; 
 		_rec.interimResults = true;
-		_rec.lang = 'en-CA';
+		_rec.lang = _userObject.language;
 		
 		_rec.onresult = function(e) {
 			for (var i = e.resultIndex; i < e.results.length; ++i) { 
 				if (e.results[i].isFinal) { 
 					// $('#transcribedText').append($('<li>').text(_userObject.name+': '+e.results[i]['0'].transcript.trim()));
+					console.log('sending text to transcibe: '+e.results[i]['0'].transcript.trim());
 					sendTranscribedText(e.results[i]['0'].transcript.trim());
 				}
 			}
@@ -50,7 +57,7 @@ function runSocket() {
 		
 		_rec.onerror = function(event) {
 			console.log('webkitSpeechRecognition error ' + event.error);
-			// rec.start();    // I added it here, because I think it dies after there is an error, or I might just have slow internet
+			_rec.start();    // I added it here, because I think it dies after there is an error, or I might just have slow internet
 		}
 		
 		_rec.start();
@@ -176,6 +183,10 @@ function runSocket() {
 
 	function sendTranscribedText(text) {
 		socket.emit('transcribedText', text);
+	}
+
+	function changeUserLanguage(language) {
+		socket.emit('changeUserLanguage', language);
 	}
 
 	// function sendCandidateEvent(event) {

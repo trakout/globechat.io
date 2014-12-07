@@ -5,7 +5,8 @@ var fs = require('fs')
 , uuidGen = require('node-uuid')
 , request = require('request')
 , xml2js = require('xml2js')
-, OpenTok = require('opentok');
+, OpenTok = require('opentok')
+, config = require('./config.json');;
 
 var StatsD = require('node-dogstatsd').StatsD;
 var dogstatsd = new StatsD();
@@ -15,6 +16,9 @@ var opentok;
 var rtc;
 var CHAT_ROOMS = {};
 var USER_SOCKET_OBJECTS = {};
+
+var OPENTOK_API_SECRET = config.opentok.secret;
+var OPENTOK_API_KEY = config.opentok.apiKey;
 
 // handle contains locations to browse to pathnames.
 function startServer(route,handle,debug)
@@ -33,7 +37,7 @@ function startServer(route,handle,debug)
         console.log("Server is up at: http://localhost:1200");
     }); 
 
-    opentok = new OpenTok("45102212", "b8fb8686a89bebab70b8f2be91b503f04d64ee14");
+    opentok = new OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET);
     initSocketIO(httpServer,debug);
 }
 
@@ -90,10 +94,30 @@ function initSocketIO(httpServer,debug)
 
         socket.on('transcribedText', function(msg) {
             var userObject = USER_SOCKET_OBJECTS[socket.id];
-            msg = userObject.name + ": " + msg;
             if ("inRoom" in userObject) {
                 var room = userObject.inRoom;
-                socketServer.to([room]).emit('transcribedText', msg);
+
+                var user1Msg = "";
+                var user2Msg = "";
+
+                var userObject2 = findUserInRoomExcluding(room, socket.id);
+
+                if (userObject2 == null) {
+                    console.log('could not find :' + userObject2.id);
+                    return;
+                }
+
+                universalTranslator(userObject2.language, userObject.language, msg, function (translatedMsg) {
+                    socket.emit('transcribedText', userObject.name + ": " + translatedMsg);                   
+
+                    var user2Socket = socketServer.sockets.connected[userObject2.id];
+
+                    universalTranslator(userObject.language, userObject2.language, msg, function (translatedMsg) {
+                        user2Socket.emit('transcribedText', userObject.name + ": " + translatedMsg);
+                    });
+                });
+
+                // socketServer.to([room]).emit('transcribedText', msg);
             }
         });
 
@@ -113,6 +137,14 @@ function initSocketIO(httpServer,debug)
                 userObject.name = name;
                 console.log(name);
                 updateUsersWithOnlineUsers();
+            }
+        });
+
+        socket.on('changeUserLanguage', function(language) {
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            if (userObject) {
+                userObject.language = language;
+                socket.emit('updatedUserObject', userObject);
             }
         });
 
@@ -196,6 +228,7 @@ function keepTrackOfSocket(socket) {
     var userObject = {};
     userObject.id = socket.id;
     userObject.name = "name_" + uuidGen.v4();
+    userObject.language = "en";
     // userObject.inRoom = "[]";
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
@@ -272,26 +305,39 @@ function createRoom(user1, user2, callback) {
 
         callback(roomObject);
     });
-
-        
 }
 
-function createSessonFromOpenTok(callback) {
+function universalTranslator(fromLang, toLang, msg, callback) {
     var options = {
-        url: 'https://api.opentok.com/hl/session/create',
-        headers: {
-            'X-TB-PARTNER-AUTH': '45102212:b8fb8686a89bebab70b8f2be91b503f04d64ee14'
-        }
+        url: 'http://localhost:18080/'+fromLang+'/'+toLang+'?string='+msg
+        // url: 'http://localhost:18080/'+fromLang+'/de?string='+msg
     };
-    request.post(options, function cb(err, httpResponse, body) {
+    console.log(options);
+    request.get(options, function cb(err, httpResponse, body) {
         if (err) {
             return console.log(err);
         }
-        var parser = new xml2js.Parser();
-        parser.parseString(body, function (err, result) {
-            return callback(result['sessions']['Session'][0]['session_id'][0]);
-        });
+        var info = JSON.parse(body);
+        console.log(info);
+        console.log(info.text);
+        callback(info.text[0]);
     });
+}
+
+function findUserInRoomExcluding(room, userId) {
+    var chatroom = CHAT_ROOMS[room];
+    console.log(CHAT_ROOMS);
+    console.log(chatroom);
+    if (chatroom == null) {
+        console.log('cant find chatroom');
+        return;
+    }
+
+    for (var i=0; i<chatroom.users.length; ++i) {
+        if (chatroom.users[i].id != userId) {
+            return chatroom.users[i];
+        }
+    }
 }
 
 exports.start = startServer;
