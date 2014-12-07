@@ -3,6 +3,8 @@ function runSocket() {
 	$('#conversationSection').hide();
 
 	var _userObject;
+	var _rec;
+	var socket;
 
 	/*************************************************************************************
 
@@ -21,12 +23,50 @@ function runSocket() {
 
 	/*************************************************************************************
 
+	* SPEECH RECOGNITION RELATED STUFF
+
+	*************************************************************************************/
+
+	function startSpeechRecognition() {
+
+		_rec = new webkitSpeechRecognition();
+		_rec.continuous = true; 
+		_rec.interimResults = true;
+		_rec.lang = 'en-CA';
+		
+		_rec.onresult = function(e) {
+			for (var i = e.resultIndex; i < e.results.length; ++i) { 
+				if (e.results[i].isFinal) { 
+					// $('#transcribedText').append($('<li>').text(_userObject.name+': '+e.results[i]['0'].transcript.trim()));
+					sendTranscribedText(e.results[i]['0'].transcript.trim());
+				}
+			}
+		}
+		
+		_rec.onstart = function () {
+			console.log('webkitSpeechRecognition started');
+		}
+		
+		_rec.onerror = function(event) {
+			console.log('webkitSpeechRecognition error ' + event.error);
+			// rec.start();    // I added it here, because I think it dies after there is an error, or I might just have slow internet
+		}
+		
+		_rec.start();
+	}
+
+	function stopSpeechRecognition() {
+		_rec = null;
+	}
+
+	/*************************************************************************************
+
 	* VIDEO RELATED STUFF
 
 	*************************************************************************************/
 
 	function startOpenTok(roomObject) {
-		console.log(roomObject);
+
 		var apiKey = "45102212";
 		var session = OT.initSession(apiKey, roomObject.id);
 
@@ -47,7 +87,9 @@ function runSocket() {
 	* SOCKET RELATED STUFF
 
 	*************************************************************************************/
-	var socket = io();
+
+	socket = io();
+
 	$('#conversationForm').submit(function(){
 
 		// send to the server the message
@@ -68,11 +110,16 @@ function runSocket() {
 		$('#conversationTranscript').append($('<li>').text(msg));
 	});
 
+	socket.on('transcribedText', function(msg){
+		$('#transcribedText').append($('<li>').text(msg));
+	});
+
 	socket.on('startChat', function (roomObject) {
 		console.log('starting chat');
 		$('#conversationSection').show();
 
 		startOpenTok(roomObject);
+		startSpeechRecognition();
 	});
 
 	socket.on('receiveChatRequest', function (userObject) {
@@ -120,6 +167,10 @@ function runSocket() {
 
 	function acceptChatRequest(userId) {
 		socket.emit('acceptChatRequest', userId);
+	}
+
+	function sendTranscribedText(text) {
+		socket.emit('transcribedText', text);
 	}
 
 	// function sendCandidateEvent(event) {

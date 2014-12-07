@@ -81,7 +81,15 @@ function initSocketIO(httpServer,debug)
                 socketServer.to([room]).emit('chatMessage', msg);
             }
             // send the message to everyone in the room
-            
+        });
+
+        socket.on('transcribedText', function(msg) {
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            msg = userObject.name + ": " + msg;
+            if ("inRoom" in userObject) {
+                var room = userObject.inRoom;
+                socketServer.to([room]).emit('transcribedText', msg);
+            }
         });
 
         socket.on('sendChatRequest', function(userId) {
