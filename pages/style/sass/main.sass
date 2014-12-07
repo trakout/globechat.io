@@ -58,6 +58,8 @@ html, body
 ul.thumb
 	list-style: none
 	padding: 10px 0
+	width: 100%
+	overflow: auto
 	li
 		cursor: pointer
 		width: 300px
@@ -96,6 +98,46 @@ ul#conversationTranscript
 		height: $recipient
 		width: 100%
 		background: $darkblue
+		.drawer
+			width: 100px
+			background: $blue
+			position: absolute
+			height: 100%
+			top: 0
+			right: 0
+			-webkit-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			-moz-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			z-index: 3
+		.pHandle
+			@include transition(all, 0.1s, ease-in-out, 0s)
+			position: absolute
+			width: 36px
+			height: 110px
+			right: 94px
+			z-index: 0
+			top: 50%
+			margin-top: -55px
+			background: $blue
+			-webkit-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			-moz-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
+			opacity: 0.6
+			&::before
+				position: absolute
+				content: ''
+				height: 0
+				width: 0
+				border: 38px solid transparent
+				border-left: 11px solid #A69972
+				top: 17px
+				left: 9px
+			&:hover
+				cursor: pointer
+				@include opacity(1)
+				-webkit-transform: translateX(-6px)
+
+
 		.videoPublish
 			width: 100% !important
 			height: 100% !important

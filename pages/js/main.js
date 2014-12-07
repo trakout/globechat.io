@@ -25,7 +25,7 @@ function runSocket() {
 		var optionSelected = $(this).find("option:selected");
 		var valueSelected  = optionSelected.val();
 		changeUserLanguage(valueSelected);
-});
+	});
 
 	/*************************************************************************************
 
@@ -143,6 +143,9 @@ function runSocket() {
 	socket.on('receiveChatRequest', function (userObject) {
 		console.log("recieved: "+ userObject);
 		if ($('#chatRequests').find('[data-user-id="' + userObject.id + '"]').length == 0) {
+			$('html, body').animate({
+                scrollTop: $("h3.requestTop").offset().top
+            }, 300);
 			$('#chatRequests').append('<li class="chatRequest" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
 		}
 	});
