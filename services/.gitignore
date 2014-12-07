@@ -1,0 +1,3 @@
+*.pyc
+translation_service/config.py
+user_info_service/config.py
