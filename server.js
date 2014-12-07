@@ -81,42 +81,21 @@ function initSocketIO(httpServer,debug)
 
         socket.on('chatMessage', function(msg){
             dogstatsd.increment('server.chatMessage');
-            var userObject = USER_SOCKET_OBJECTS[socket.id];
-            msg = userObject.name + ": " + msg;
-            if ("inRoom" in userObject) {
-                var room = userObject.inRoom;
-                socketServer.to([room]).emit('chatMessage', msg);
-            }
+            translateTextAndEmitBack(socket, msg);
+            // OLD CODE: might be useful =/
+            // var userObject = USER_SOCKET_OBJECTS[socket.id];
+            // msg = userObject.name + ": " + msg;
+            // if ("inRoom" in userObject) {
+            //     var room = userObject.inRoom;
+            //     socketServer.to([room]).emit('chatMessage', msg);
+            // }
+            // translateTextAndEmitBack(socket, msg);
             // send the message to everyone in the room
         });
 
         socket.on('transcribedText', function(msg) {
-            var userObject = USER_SOCKET_OBJECTS[socket.id];
-            if ("inRoom" in userObject) {
-                var room = userObject.inRoom;
-
-                var user1Msg = "";
-                var user2Msg = "";
-
-                var userObject2 = findUserInRoomExcluding(room, socket.id);
-
-                if (userObject2 == null) {
-                    console.log('could not find :' + userObject2.id);
-                    return;
-                }
-
-                universalTranslator(userObject2.language, userObject.language, msg, function (translatedMsg) {
-                    socket.emit('transcribedText', userObject.name + ": " + translatedMsg);                   
-
-                    var user2Socket = socketServer.sockets.connected[userObject2.id];
-
-                    universalTranslator(userObject.language, userObject2.language, msg, function (translatedMsg) {
-                        user2Socket.emit('transcribedText', userObject.name + ": " + translatedMsg);
-                    });
-                });
-
-                // socketServer.to([room]).emit('transcribedText', msg);
-            }
+            dogstatsd.increment('server.transcribedText');
+            translateTextAndEmitBack(socket, msg);
         });
 
         socket.on('sendChatRequest', function(userId) {
@@ -354,4 +333,33 @@ function findUserInRoomExcluding(room, userId) {
     }
 }
 
+function translateTextAndEmitBack(socket, msg) {
+
+    var userObject = USER_SOCKET_OBJECTS[socket.id];
+    if ("inRoom" in userObject) {
+        var room = userObject.inRoom;
+
+        var user1Msg = "";
+        var user2Msg = "";
+
+        var userObject2 = findUserInRoomExcluding(room, socket.id);
+
+        if (userObject2 == null) {
+            console.log('could not find :' + userObject2.id);
+            return;
+        }
+
+        universalTranslator(userObject2.language, userObject.language, msg, function (translatedMsg) {
+            socket.emit('transcribedText', userObject.name + ": " + translatedMsg);                   
+
+            var user2Socket = socketServer.sockets.connected[userObject2.id];
+
+            universalTranslator(userObject.language, userObject2.language, msg, function (translatedMsg) {
+                user2Socket.emit('transcribedText', userObject.name + ": " + translatedMsg);
+            });
+        });
+
+        // socketServer.to([room]).emit('transcribedText', msg);
+    }
+}
 exports.start = startServer;
