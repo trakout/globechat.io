@@ -123,6 +123,11 @@ function runSocket() {
 	});
 
 	socket.on('transcribedText', function(msg){
+		if ($('#conversationSection h3').length > 0) {
+			$('#conversationSection h3').fadeOut('fast', function() {
+				$('#conversationSection h3').remove();
+			});
+		}
 		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
 	});
 
@@ -155,8 +160,15 @@ function runSocket() {
 		var keys = Object.keys(userArray);
 		for (var i=0; i<keys.length; ++i) {
 			var userObject = userArray[keys[i]];
-			if (userObject.id != _userObject.id) {
-				$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
+			console.log(userObject);
+			if (userObject.hasOwnProperty('image')) {
+				if (userObject.id != _userObject.id) {
+					$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">' + userObject.name + '<img src="data:image/png;base64,' + userObject.image + '" /></li>');
+				}
+			} else {
+				if (userObject.id != _userObject.id) {
+					$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">' + userObject.name + '</li>');
+				}
 			}
 		}
 	});
@@ -209,7 +221,10 @@ function loadChatRoom() {
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');
-			session.publish(publisher);
+			session.publish(publisher, function() {
+				var imgData = publisher.getImgData();
+				socket.emit('userImage', imgData);
+			});
 			$('body').fadeIn('fast');
 			checkDom();
 		});
@@ -218,7 +233,6 @@ function loadChatRoom() {
 
 function sendString(val) {
 	if ($('#conversationSection h3').length > 0) {
-		console.log('removal');
 		$('#conversationSection h3').fadeOut('fast', function() {
 			$('#conversationSection h3').remove();
 		});
@@ -310,6 +324,21 @@ function checkDom() {
 		runResizes();
 		enterShort();
 	}
+	$("input:text").each(function ()
+	{
+	    // store default value
+	    var v = this.value;
+
+	    $(this).blur(function ()
+	    {
+	        // if input is empty, reset value to default 
+	        if (this.value.length == 0) this.value = v;
+	    }).focus(function ()
+	    {
+	        // when input is focused, clear its contents
+	        this.value = "";
+	    }); 
+	});
 }
 
 $(document).ready(function() {

@@ -182,6 +182,14 @@ function initSocketIO(httpServer,debug)
             }
         });
 
+        socket.on('userImage', function(imageData) {
+            dogstatsd.increment('server.sendImage');
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            if (userObject) {
+                userObject.image = imageData;
+            }
+        });
+
         // socket.emit('onconnection', {pollOneValue:sendData});
     
         // socketServer.on('update', function(data) {
