@@ -2620,6 +2620,11 @@ html, body {
   top: 70%;
 }
 
+.chat-parent {
+  height: 100%;
+  width: 100%;
+}
+
 .chat {
   position: relative;
   height: 100%;
@@ -2630,6 +2635,17 @@ html, body {
   height: 75%;
   width: 100%;
   background: #2C3540;
+}
+.chat .recipient .videoPublish {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+.chat .recipient .videoPublish .OT_video-container {
+  width: auto !important;
+  left: 50% !important;
+  -webkit-transform: translateX(-50%) !important;
 }
 .chat .recipient .viewer {
   position: absolute;
