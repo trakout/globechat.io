@@ -7,6 +7,9 @@ var fs = require('fs')
 , xml2js = require('xml2js')
 , OpenTok = require('opentok');
 
+var StatsD = require('node-dogstatsd').StatsD;
+var dogstatsd = new StatsD();
+
 var socketServer;
 var opentok;
 var rtc;
@@ -50,7 +53,7 @@ function initSocketIO(httpServer,debug)
         updateUsersWithOnlineUsers();
 
         socket.on('disconnect', function(){
-
+            dogstatsd.increment('server.disconnect');
             destroyUsersRoom(USER_SOCKET_OBJECTS[socket.id], false);
             delete USER_SOCKET_OBJECTS[socket.id];
             // TODO: also delete them from any chatrooms
@@ -62,6 +65,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('acceptChatRequest', function (userId) {
+            dogstatsd.increment('server.acceptChatRequest');
             console.log('starting chat between '+userId+' and '+socket.id);
 
             createRoom(socket.id, userId, function (roomObject) {
@@ -74,6 +78,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('chatMessage', function(msg){
+            dogstatsd.increment('server.chatMessage');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             msg = userObject.name + ": " + msg;
             if ("inRoom" in userObject) {
@@ -93,6 +98,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('sendChatRequest', function(userId) {
+            dogstatsd.increment('server.sendChatRequest');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             if (userObject) {
                 console.log(socket.id+" sending chat request to:" + userObject.id);    
@@ -101,6 +107,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('changeName', function(name) {
+            dogstatsd.increment('server.changeName');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             if (userObject) {
                 userObject.name = name;
@@ -110,7 +117,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('sendSessionDescription', function(sessionDescription) {
-            // TODO: Fix this!
+            dogstatsd.increment('server.sendSessionDescription');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             
             if ('inRoom' in userObject) {
@@ -128,7 +135,7 @@ function initSocketIO(httpServer,debug)
         });
 
         socket.on('sendCandidateEvent', function(candidateEvent) {
-            // TODO: Fix this!
+            dogstatsd.increment('server.sendSessionDescription');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             
             if ('inRoom' in userObject) {
