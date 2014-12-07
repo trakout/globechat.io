@@ -2620,9 +2620,28 @@ html, body {
   top: 70%;
 }
 
+ul.thumb {
+  list-style: none;
+  padding: 10px 0;
+}
+ul.thumb li {
+  cursor: pointer;
+  width: 300px;
+  height: 300px;
+  background: #A69972;
+  float: left;
+  margin: 45px;
+  position: relative;
+  overflow: hidden;
+}
+
 ul#conversationTranscript {
   padding: 10px 14px;
   list-style: none;
+}
+ul#conversationTranscript li {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
 ul#conversationTranscript li.normal {
   color: black;
