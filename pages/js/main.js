@@ -70,21 +70,8 @@ function runSocket() {
 
 		apiKey = "45102212";
 		session = OT.initSession(apiKey, roomObject.id);
+		loadChatRoom(roomObject);
 
-
-		session.on("streamCreated", function(event) {
-			console.log('OpenTok stream created');
-			session.subscribe(event.stream);
-		});
-
-		session.connect(roomObject.token, function(error) {
-			console.log('OpenTok session connected');
-
-			loadChatRoom();
-			// publisher = OT.initPublisher(apiKey, 'videoPublish');
-			// session.publish(publisher);
-			// moved to loadChatRoom
-		});
 	}
 
 	/*************************************************************************************
@@ -193,13 +180,29 @@ function runSocket() {
 	// }
 } // runSocket
 
-function loadChatRoom() {
-	console.log('loading');
+function loadChatRoom(roomObject) {
+	
 	$('body').fadeOut('fast', function() {
-		$('body').load('/chat.html .chat-parent', function() {
+		$('body').load('/chat.html .chat-parent', function () {
 
-			publisher = OT.initPublisher(apiKey, 'videoPublish');
+			console.log(roomObject);
+			publisher = OT.initPublisher(apiKey, 'videoSelfie');
 			session.publish(publisher);
+
+			session.on("streamCreated", function(event) {
+				console.log('OpenTok stream created');
+				session.subscribe(event.stream);
+			});
+
+			session.connect(roomObject.token, function(error) {
+				console.log('OpenTok session connected');
+
+				
+				// publisher = OT.initPublisher(apiKey, 'videoPublish');
+				// session.publish(publisher);
+				// moved to loadChatRoom
+			});
+
 			$('body').fadeIn('fast');
 			
 
