@@ -26,8 +26,18 @@ def get_weather(location_details, user_information):
         data = fetch_data(WEATHER_API_CITY_URL.format(location_details['city']))
     
     if data:
-        user_information['temperature'] = convert_kelvin_to_celsius(data['main']['temp'])
-        user_information['weather'] = data['weather'][0]['main']
+        if 'main' in data and 'temp' in data['main']:
+            user_information['temperature'] = convert_kelvin_to_celsius(data['main']['temp'])
+        else:
+            print "data[main] not found"
+            print data
+
+        if 'weather' in data and len(data['weather']) > 0 and 'description' in data['weather'][0] and 'id' in data['weather'][0]:
+            user_information['weather'] = data['weather'][0]['description']
+            user_information['weather_id'] = data['weather'][0]['id']
+        else:
+            print "data[weather] has missing details"
+            print data
     
     return user_information
 
