@@ -221,7 +221,7 @@ function keepTrackOfSocket(socket) {
     userObject.id = socket.id;
     userObject.name = "name_" + uuidGen.v4();
     userObject.language = "en";
-    userObject.ip = socket.request.connection.remoteAddress;
+    userObject.ip = socket.handshake.address;
     // userObject.inRoom = "[]";
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
