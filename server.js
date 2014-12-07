@@ -43,10 +43,8 @@ function initSocketIO(httpServer,debug)
     socketServer.on('connection', function (socket) {
         console.log("user connected");
 
-        keepTrackOfSocket(socket);
-
-        // make the socket join a unique room
-        socket.join('some-unqiue-room-id');
+        var userObject = keepTrackOfSocket(socket);
+        socket.emit('updatedUserObject', userObject);
 
         // tell everyone the updated list of users online
         updateUsersWithOnlineUsers();
@@ -171,6 +169,7 @@ function keepTrackOfSocket(socket) {
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
     console.log(userObject);
+    return userObject;
 }
 
 function updateUsersWithOnlineUsers() {
