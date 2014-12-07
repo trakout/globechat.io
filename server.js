@@ -56,9 +56,6 @@ function initSocketIO(httpServer,debug)
             dogstatsd.increment('server.disconnect');
             destroyUsersRoom(USER_SOCKET_OBJECTS[socket.id], false);
             delete USER_SOCKET_OBJECTS[socket.id];
-            // TODO: also delete them from any chatrooms
-            console.log("xxxManu CHAT ROOMS: " + JSON.stringify(CHAT_ROOMS));
-            console.log("xxxManu USER_SOCKET_OBJECTS: " + JSON.stringify(USER_SOCKET_OBJECTS));
 
             updateUsersWithOnlineUsers();
             console.log('user disconnected');
