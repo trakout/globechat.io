@@ -72,7 +72,7 @@ function runSocket() {
 
 	*************************************************************************************/
 
-	function startOpenTok(roomObject) {
+	function startOpenTok(roomObject, otherUserLocationData) {
 
 		apiKey = "45102212";
 		session = OT.initSession(apiKey, roomObject.id);
@@ -86,7 +86,7 @@ function runSocket() {
 		session.connect(roomObject.token, function(error) {
 			console.log('OpenTok session connected');
 
-			loadChatRoom();
+			loadChatRoom(otherUserLocationData);
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
@@ -136,7 +136,7 @@ function runSocket() {
 		console.log(otherUserLocationData);
 		$('#conversationSection').show();
 
-		startOpenTok(roomObject);
+		startOpenTok(roomObject, otherUserLocationData);
 		startSpeechRecognition();
 	});
 
@@ -220,7 +220,7 @@ function runSocket() {
 	// }
 } // runSocket
 
-function loadChatRoom() {
+function loadChatRoom(otherUserLocationData) {
 	console.log('loading');
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
@@ -230,6 +230,7 @@ function loadChatRoom() {
 				socket.emit('userImage', imgData);
 			});
 			$('body').fadeIn('fast');
+			$('.drawer .location').html(otherUserLocationData);
 			checkDom();
 		});
 	});
