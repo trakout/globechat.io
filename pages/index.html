@@ -135,7 +135,9 @@
 
 			socket.on('receiveChatRequest', function (userObject) {
 				console.log("recieved: "+ userObject);
-				$('#chatRequests').append('<li class="chatRequest" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
+				if ($('#chatRequests').find('[data-user-id="' + userObject.id + '"]').length == 0) {
+					$('#chatRequests').append('<li class="chatRequest" data-user-id="'+userObject.id+'">'+userObject.name+'</li>');
+				}
 			});
 
 			socket.on('updatedUserObject', function (userObject) {
