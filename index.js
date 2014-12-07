@@ -1,5 +1,12 @@
 var debug = false;
 
+// metrics
+var StatsD = require('node-dogstatsd').StatsD;
+var dogstatsd = new StatsD();
+
+dogstatsd.increment('page.views');
+
+// server
 var server = require("./server")
 , router = require("./route")
 , requestHandlers = require("./requestHandlers");
