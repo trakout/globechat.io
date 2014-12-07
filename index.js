@@ -25,6 +25,7 @@ handle["/"] = requestHandlers.sendInterface
 , handle["/interface"] = requestHandlers.sendInterface
 , handle["/plugins.js"] = requestHandlers.sendPluginJs
 , handle["/main.js"] = requestHandlers.sendMainJs
+, handle["/holla.js"] = requestHandlers.sendHollaJs
 , handle["/modernizr-2.6.2.min.js"] = requestHandlers.sendModernizr;
 
 server.start(router.route,handle,debug);

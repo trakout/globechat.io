@@ -27,6 +27,11 @@ function sendMainJs(response) {
 	var jsMain = fs.readFileSync(__dirname + "/pages/js/main.js")
 	response.end(jsMain);
 }
+function sendHollaJs(response) {
+	response.writeHead(200, {"Content-Type": "application/javascript"});
+	var jsHolla = fs.readFileSync(__dirname + "/pages/js/holla.js")
+	response.end(jsHolla);
+}
 
 // updateable
 function sendModernizr(response) {
@@ -51,6 +56,7 @@ exports.sendMainCss = sendMainCss;
 exports.sendMapCss = sendMapCss;
 exports.sendPluginJs = sendPluginJs;
 exports.sendMainJs = sendMainJs;
+exports.sendHollaJs = sendHollaJs;
 
 exports.sendModernizr = sendModernizr;
 

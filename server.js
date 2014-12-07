@@ -2,9 +2,14 @@ var fs = require('fs')
 , http = require('http')
 , socketio = require('socket.io')
 , url = require("url")
-, uuidGen = require('node-uuid');
+, uuidGen = require('node-uuid')
+, request = require('request')
+, xml2js = require('xml2js')
+, OpenTok = require('opentok');
 
 var socketServer;
+var opentok;
+var rtc;
 var CHAT_ROOMS = {};
 var USER_SOCKET_OBJECTS = {};
 
@@ -27,6 +32,7 @@ function startServer(route,handle,debug)
 
     }); 
 
+    opentok = new OpenTok("45102212", "b8fb8686a89bebab70b8f2be91b503f04d64ee14");
     initSocketIO(httpServer,debug);
 }
 
@@ -58,9 +64,13 @@ function initSocketIO(httpServer,debug)
         socket.on('acceptChatRequest', function (userId) {
             console.log('starting chat between '+userId+' and '+socket.id);
 
-            var roomId = createRoom(socket.id, userId);
-            socketServer.to(userId).emit('startChat', socket.id);
-            socketServer.to(socket.id).emit('startChat', userId);
+            createRoom(socket.id, userId, function (roomObject) {
+                console.log(roomObject);
+                socketServer.to(userId).emit('startChat', roomObject);
+                socketServer.to(socket.id).emit('startChat', roomObject);
+            });
+            // socketServer.to(userId).emit('startChat', socket.id);
+            // socketServer.to(socket.id).emit('startChat', userId);
         });
 
         socket.on('chatMessage', function(msg){
@@ -78,6 +88,40 @@ function initSocketIO(httpServer,debug)
             if (userObject) {
                 console.log(socket.id+" sending chat request to:" + userObject.id);    
                 socket.broadcast.to(userId).emit('receiveChatRequest', userObject);
+            }
+        });
+
+        socket.on('sendSessionDescription', function(sessionDescription) {
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            var rooms = userObject.inRoom;
+
+            if (rooms.length > 0) {
+                var currentRoom = CHAT_ROOMS[rooms[0]];
+                var currentUserObject;
+                for (var i=0; i<currentRoom.users.length; ++i) {
+                    currentUserObject = currentRoom.users[i];
+                    console.log(currentUserObject.id+' = '+socket.id);
+                    if (currentUserObject.id != socket.id) {
+                        socket.broadcast.to(currentUserObject.id).emit('receivedSessionDescription', sessionDescription);
+                    } 
+                }
+            }
+        });
+
+        socket.on('sendCandidateEvent', function(candidateEvent) {
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            var rooms = userObject.inRoom;
+
+            if (rooms.length > 0) {
+                var currentRoom = CHAT_ROOMS[rooms[0]];
+                var currentUserObject;
+                for (var i=0; i<currentRoom.users.length; ++i) {
+                    currentUserObject = currentRoom.users[i];
+                    console.log(currentUserObject.id+' = '+socket.id);
+                    if (currentUserObject.id != socket.id) {
+                        socket.broadcast.to(currentUserObject.id).emit('receivedCandidateEvent', candidateEvent);
+                    } 
+                }
             }
         });
 
@@ -135,28 +179,62 @@ function updateUsersWithOnlineUsers() {
     socketServer.emit('listOfUsersOnline', USER_SOCKET_OBJECTS);
 }
 
-function createRoom(user1, user2) {
+function createRoom(user1, user2, callback) {
 
-    var roomId = uuidGen.v4();
-    console.log("creating room: " + roomId);
-    var roomObject = {};
-    roomObject.id = roomId;
+    opentok.createSession(function(err, session) {
+        if (err) return console.log(err);
 
-    var user1Socket = socketServer.sockets.connected[user1];
-    var user2Socket = socketServer.sockets.connected[user2];
+        token = opentok.generateToken(session.sessionId);
 
-    var userObject1 = USER_SOCKET_OBJECTS[user1];
-    var userObject2 = USER_SOCKET_OBJECTS[user2];
+        console.log('generated open tok session id: ' + session.sessionId);
+        if (!session.sessionId) {
+            return;
+        }
+
+        var roomId = session.sessionId;
+        console.log("creating room: " + roomId);
+        var roomObject = {};
+        roomObject.id = roomId;
+        roomObject.token = token;
+
+        var user1Socket = socketServer.sockets.connected[user1];
+        var user2Socket = socketServer.sockets.connected[user2];
+
+        var userObject1 = USER_SOCKET_OBJECTS[user1];
+        var userObject2 = USER_SOCKET_OBJECTS[user2];
 
 
-    if (user1Socket && user2Socket && userObject1 && userObject2) {
-        user1Socket.join(roomId);
-        user2Socket.join(roomId);
-        roomObject.users = [USER_SOCKET_OBJECTS[user1], USER_SOCKET_OBJECTS[user2]];
-        userObject1.inRoom.push(roomId);
-        userObject2.inRoom.push(roomId);
-        CHAT_ROOMS[roomId] = roomObject;
-    }
+        if (user1Socket && user2Socket && userObject1 && userObject2) {
+            user1Socket.join(roomId);
+            user2Socket.join(roomId);
+            roomObject.users = [USER_SOCKET_OBJECTS[user1], USER_SOCKET_OBJECTS[user2]];
+            userObject1.inRoom.push(roomId);
+            userObject2.inRoom.push(roomId);
+            CHAT_ROOMS[roomId] = roomObject;
+        }
+
+        callback(roomObject);
+    });
+
+        
+}
+
+function createSessonFromOpenTok(callback) {
+    var options = {
+        url: 'https://api.opentok.com/hl/session/create',
+        headers: {
+            'X-TB-PARTNER-AUTH': '45102212:b8fb8686a89bebab70b8f2be91b503f04d64ee14'
+        }
+    };
+    request.post(options, function cb(err, httpResponse, body) {
+        if (err) {
+            return console.log(err);
+        }
+        var parser = new xml2js.Parser();
+        parser.parseString(body, function (err, result) {
+            return callback(result['sessions']['Session'][0]['session_id'][0]);
+        });
+    });
 }
 
 exports.start = startServer;

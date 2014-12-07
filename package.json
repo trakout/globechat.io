@@ -6,10 +6,14 @@
     "start": "node index.js"
   },
   "dependencies": {
-    
+    "holla": "^0.6.3",
     "node-uuid": "^1.4.2",
+    "opentok": "^2.2.4",
+    "pm2": "*",
+    "request": "^2.49.0",
+    "simplewebrtc": "^1.11.1",
     "socket.io": "*",
-    "pm2": "*"
+    "xml2js": "^0.4.4"
   },
   "devDependencies": {
     "gulp": "^3.8.10",

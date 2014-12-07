@@ -42,6 +42,7 @@
 
 	<h1>GlobeChat!!</h1>
 
+	<video id="localVideo" width="320" height="240" autoplay></video>  
 	<div id="conversationSection">
 		<h3>Transcript here:</h3>
 		<ul id="conversationTranscript"></ul>
@@ -56,10 +57,10 @@
 	<h3>Chat requests (click to start chat):</h3>
 	<ul id="chatRequests"></ul>
 
-	<script src="/socket.io/socket.io.js"></script>
-
 	<script src="plugins.js"></script>
 	<script src="main.js"></script>
+	<script src='http://static.opentok.com/webrtc/v2.2/js/opentok.min.js'></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
 
@@ -83,6 +84,29 @@
 
 			/*************************************************************************************
 
+			* VIDEO RELATED STUFF
+
+			*************************************************************************************/
+
+			function startOpenTok(roomObject) {
+				console.log(roomObject);
+				var apiKey = "45102212";
+				var session = OT.initSession(apiKey, roomObject.id);
+
+				session.on("streamCreated", function(event) {
+					console.log('OpenTok stream created');
+					session.subscribe(event.stream);
+				});
+
+				session.connect(roomObject.token, function(error) {
+					console.log('OpenTok session connected');
+					var publisher = OT.initPublisher();
+					session.publish(publisher);
+				});
+			}
+
+			/*************************************************************************************
+
 			* SOCKET RELATED STUFF
 
 			*************************************************************************************/
@@ -100,9 +124,11 @@
 				$('#conversationTranscript').append($('<li>').text(msg));
 			});
 
-			socket.on('startChat', function () {
+			socket.on('startChat', function (roomObject) {
 				console.log('starting chat');
 				$('#conversationSection').show();
+
+				startOpenTok(roomObject);
 			});
 
 			socket.on('receiveChatRequest', function (userObject) {
@@ -123,6 +149,18 @@
 				}
 			});
 
+			socket.on('receivedSessionDescription', function(sessionDescription) {
+				console.log('received session description: ' + sessionDescription);
+			});
+
+			socket.on('receivedCandidateEvent', function(candidateEvent) {
+				console.log('got candidate event');
+				var candidate = new RTCIceCandidate({
+					sdpMLineIndex: candidateEvent.label,
+					candidate: candidateEvent.candidate
+				});
+			});
+
 			function requestToChatWithUser(userId) {
 				socket.emit('sendChatRequest', userId);
 			}
@@ -130,6 +168,20 @@
 			function acceptChatRequest(userId) {
 				socket.emit('acceptChatRequest', userId);
 			}
+
+			// function sendCandidateEvent(event) {
+			// 	socket.emit('sendCandidateEvent', {
+			// 		type: 'candidate',
+			// 		label: event.candidate.sdpMLineIndex,
+			// 		id: event.candidate.sdpMid,
+			// 		candidate: event.candidate.candidate
+			// 	});
+			// }
+
+			// function sendSessionDescription(sessionDescription) {
+			// 	console.log('sending session description');
+			// 	socket.emit('sendSessionDescription', sessionDescription);
+			// }
 		}); 
 
 	</script>
