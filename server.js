@@ -71,8 +71,15 @@ function initSocketIO(httpServer,debug)
 
             createRoom(socket.id, userId, function (roomObject) {
                 console.log(roomObject);
-                socketServer.to(userId).emit('startChat', roomObject);
-                socketServer.to(socket.id).emit('startChat', roomObject);
+
+                userInfoFromIp(USER_SOCKET_OBJECTS[socket.id].ip, function (userLocationInfo1) {
+                    socketServer.to(userId).emit('startChat', roomObject, userLocationInfo1);
+                });
+
+                userInfoFromIp(USER_SOCKET_OBJECTS[userId].ip, function (userLocationInfo2) {
+                    socketServer.to(socket.id).emit('startChat', roomObject, userLocationInfo2);
+                });
+
                 updateUsersWithOnlineUsers();
             });
             // socketServer.to(userId).emit('startChat', socket.id);
@@ -214,6 +221,7 @@ function keepTrackOfSocket(socket) {
     userObject.id = socket.id;
     userObject.name = "name_" + uuidGen.v4();
     userObject.language = "en";
+    userObject.ip = socket.request.connection.remoteAddress;
     // userObject.inRoom = "[]";
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
@@ -314,6 +322,19 @@ function universalTranslator(fromLang, toLang, msg, callback) {
         console.log(info);
         console.log(info.text);
         callback(info.text[0]);
+    });
+}
+
+function userInfoFromIp(ipAddr, callback) {
+    var options = {
+        url: 'http://localhost:18081/user_info/'+ipAddr
+    };
+    request.get(options, function cb(err, httpResponse, body) {
+        if (err) {
+            return console.log(err);
+        }
+        var info = JSON.parse(body);
+        callback(body);
     });
 }
 

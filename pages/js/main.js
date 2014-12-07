@@ -131,8 +131,9 @@ function runSocket() {
 		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
 	});
 
-	socket.on('startChat', function (roomObject) {
+	socket.on('startChat', function (roomObject, otherUserLocationData) {
 		console.log('starting chat');
+		console.log(otherUserLocationData);
 		$('#conversationSection').show();
 
 		startOpenTok(roomObject);
