@@ -32,6 +32,7 @@ handle["/"] = requestHandlers.sendInterface
 , handle["/interface"] = requestHandlers.sendInterface
 , handle["/plugins.js"] = requestHandlers.sendPluginJs
 , handle["/main.js"] = requestHandlers.sendMainJs
+, handle["/holla.js"] = requestHandlers.sendHollaJs
 , handle["/favicon.ico"] = requestHandlers.sendIco
 , handle["/apple-touch-icon-precomposed.png"] = requestHandlers.sendMobile
 , handle["/modernizr-2.6.2.min.js"] = requestHandlers.sendModernizr;
