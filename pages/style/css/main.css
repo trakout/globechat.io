@@ -2564,7 +2564,7 @@ td {
   font-style: normal;
 }
 body {
-  background: #3F4B59;
+  background: #F2E3D0;
   height: 100%;
   width: 100%;
   font-family: "camptonlight", Helvetica, Arial, sans-serif;
@@ -2572,8 +2572,9 @@ body {
 
 .logo {
   position: relative;
-  height: 130px;
-  width: 130px;
+  display: block;
+  margin: 20px auto;
+  width: 200px;
 }
 
 .hidden {
@@ -2601,7 +2602,7 @@ body {
   left: 0;
 }
 .user-content span {
-  background: #F2E3D0;
+  background: #3F4B59;
   position: absolute;
   width: 100%;
   height: 30%;
