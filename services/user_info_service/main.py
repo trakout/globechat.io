@@ -1,11 +1,17 @@
 import urllib2
 import json
+import datetime
+import time
+import calendar
 
 from bottle import route, run, template, request
+
+from config import TIME_API_KEY
 
 IP_TO_CITY_API_URL = "http://ip-api.com/json/{0}"
 WEATHER_API_LAT_LON_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}"
 WEATHER_API_CITY_URL = "http://api.openweathermap.org/data/2.5/weather?q={0}"
+TIME_URL = "https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&key={3}"
 
 def convert_kelvin_to_celsius(kelvin):
     return kelvin - 273.15
@@ -44,11 +50,24 @@ def get_weather(location_details, user_information):
 def get_location_details(ip):
     return fetch_data(IP_TO_CITY_API_URL.format(ip))
 
+def dt(u): return datetime.datetime.utcfromtimestamp(u).strftime('%Y-%m-%d %H:%M:%S')
+
+def get_local_time(location_details, user_information):
+    if 'lat' in location_details and 'lon' in location_details:
+        cur_time = calendar.timegm(time.gmtime())
+        url = TIME_URL.format(location_details['lat'], location_details['lon'], cur_time, TIME_API_KEY)
+        data = fetch_data(url)
+        local_time = cur_time + data['dstOffset'] + data['rawOffset']
+        user_information['local_time'] = dt(local_time)
+    
+    return user_information
+
 def get_user_information(ip):
     user_information = {}
 
     location_details = get_location_details(ip)
     user_information = get_weather(location_details, user_information)
+    user_information = get_local_time(location_details, user_information)
     
     return user_information
 

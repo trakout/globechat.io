@@ -1,11 +1,10 @@
-var publisher, session, apiKey;
+var publisher, session, apiKey, socket;
 
 function runSocket() {
 	$('#conversationSection').hide();
 
 	var _userObject;
 	var _rec;
-	var socket;
 
 	/*************************************************************************************
 
@@ -81,7 +80,7 @@ function runSocket() {
 
 		session.on("streamCreated", function(event) {
 			console.log('OpenTok stream created');
-			session.subscribe(event.stream);
+			session.subscribe(event.stream, 'videoPublish');
 		});
 
 		session.connect(roomObject.token, function(error) {
@@ -102,13 +101,14 @@ function runSocket() {
 
 	socket = io();
 
-	$('#conversationForm').submit(function(){
+	// $('#conversationForm').submit(function(){
 
-		// send to the server the message
-		socket.emit('chatMessage', $('#messageInput').val());
-			$('#messageInput').val('');
-		return false;
-	});
+	// 	// send to the server the message
+	// 	socket.emit('chatMessage', $('#messageInput').val());
+	// 		$('#messageInput').val('');
+	// 	return false;
+	// });
+	// ^^^^ moved to sendString
 
 	$('#changeNameForm').submit(function(){
 
@@ -119,11 +119,11 @@ function runSocket() {
 
 	// recieved message
 	socket.on('chatMessage', function(msg){
-		$('#conversationTranscript').append($('<li>').text(msg));
+		$('#conversationTranscript').append($('<li class="normal">').text(msg));
 	});
 
 	socket.on('transcribedText', function(msg){
-		$('#transcribedText').append($('<li>').text(msg));
+		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
 	});
 
 	socket.on('startChat', function (roomObject) {
@@ -208,47 +208,57 @@ function loadChatRoom() {
 	console.log('loading');
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
-
-			publisher = OT.initPublisher(apiKey, 'videoPublish');
+			publisher = OT.initPublisher(apiKey, 'videoSelfie');
 			session.publish(publisher);
 			$('body').fadeIn('fast');
-			
-
+			checkDom();
 		});
 	});
-	
 }
 
 function sendString(val) {
-	console.log('this was sent: ' + val);
-
-
-	
-	// run socket to other peer
+	if ($('#conversationSection h3').length > 0) {
+		console.log('removal');
+		$('#conversationSection h3').fadeOut('fast', function() {
+			$('#conversationSection h3').remove();
+		});
+	}
+	socket.emit('chatMessage', val);
 }
 
 // keyboard shortcuts
-$('.text-submit textarea').bind('keydown', function(e) {
-	var code = e.keyCode || e.which;
-	if (code == 13 && e.shiftKey == false && ($('.text-submit textarea').val().length > 0)) { 
+function enterShort() {
 
-		var testText = $('.text-submit textarea').val();
-		var matches = testText.match(/\n/g);
-		var breaks = matches ? matches.length : 0;
-
-		if (!(($('.text-submit textarea').val().length == 1) && (breaks == 1))) {
-			// if no breaks, then this's an enter/submit key
-			sendString($('.text-submit textarea').val());
-			TweenMax.to('.text-submit textarea', 0.2, {opacity:0, onComplete:function() {
-				$('textarea').val('');
-				TweenMax.to('.text-submit textarea', 0.1, {opacity:1});
-			}}); // tweenmax
-		} else {
+	$('.text-button').click(function() {
+		sendString($('.text-submit textarea').val());
+		TweenMax.to('.text-submit textarea', 0.2, {opacity:0, onComplete:function() {
 			$('textarea').val('');
-			// user submitting blank data, disallowed
-		}
-	} 
-});
+			TweenMax.to('.text-submit textarea', 0.1, {opacity:1});
+		}}); // tweenmax
+	});
+
+	$('.text-submit textarea').bind('keydown', function(e) {
+		var code = e.keyCode || e.which;
+		if (code == 13 && e.shiftKey == false && ($('.text-submit textarea').val().length > 0)) { 
+
+			var testText = $('.text-submit textarea').val();
+			var matches = testText.match(/\n/g);
+			var breaks = matches ? matches.length : 0;
+
+			if (!(($('.text-submit textarea').val().length == 1) && (breaks == 1))) {
+				// if no breaks, then this's an enter/submit key
+				sendString($('.text-submit textarea').val());
+				TweenMax.to('.text-submit textarea', 0.2, {opacity:0, onComplete:function() {
+					$('textarea').val('');
+					TweenMax.to('.text-submit textarea', 0.1, {opacity:1});
+				}}); // tweenmax
+			} else {
+				$('textarea').val('');
+				// user submitting blank data, disallowed
+			}
+		} 
+	});
+} // enterShort
 
 function autoResize(e) {
 	var ele = e.target;
@@ -298,6 +308,7 @@ function runResizes() {
 function checkDom() {
 	if ($('.chat').length > 0) {
 		runResizes();
+		enterShort();
 	}
 }
 

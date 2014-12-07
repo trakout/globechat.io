@@ -2620,6 +2620,17 @@ html, body {
   top: 70%;
 }
 
+ul#conversationTranscript {
+  padding: 10px 14px;
+  list-style: none;
+}
+ul#conversationTranscript li.normal {
+  color: black;
+}
+ul#conversationTranscript li.transcribed {
+  color: #3F4B59;
+}
+
 .chat-parent {
   height: 100%;
   width: 100%;
@@ -2665,6 +2676,12 @@ html, body {
 .text-area .text-history {
   height: 100%;
   padding-right: 100px;
+}
+.text-area .text-history h3 {
+  display: inline-block;
+  padding: 0px 10px;
+  margin-top: 10px;
+  color: #A69972;
 }
 .text-area .text-submit {
   position: absolute;

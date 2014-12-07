@@ -60,9 +60,6 @@ function initSocketIO(httpServer,debug)
             dogstatsd.increment('server.disconnect');
             destroyUsersRoom(USER_SOCKET_OBJECTS[socket.id], false);
             delete USER_SOCKET_OBJECTS[socket.id];
-            // TODO: also delete them from any chatrooms
-            console.log("xxxManu CHAT ROOMS: " + JSON.stringify(CHAT_ROOMS));
-            console.log("xxxManu USER_SOCKET_OBJECTS: " + JSON.stringify(USER_SOCKET_OBJECTS));
 
             updateUsersWithOnlineUsers();
             console.log('user disconnected');
@@ -76,6 +73,7 @@ function initSocketIO(httpServer,debug)
                 console.log(roomObject);
                 socketServer.to(userId).emit('startChat', roomObject);
                 socketServer.to(socket.id).emit('startChat', roomObject);
+                updateUsersWithOnlineUsers();
             });
             // socketServer.to(userId).emit('startChat', socket.id);
             // socketServer.to(socket.id).emit('startChat', userId);
@@ -237,7 +235,15 @@ function keepTrackOfSocket(socket) {
 }
 
 function updateUsersWithOnlineUsers() {
-    socketServer.emit('listOfUsersOnline', USER_SOCKET_OBJECTS);
+    inactive_users = {};
+
+    for (var key in USER_SOCKET_OBJECTS) {
+        if (!('inRoom' in USER_SOCKET_OBJECTS[key])) {
+            inactive_users[key] = USER_SOCKET_OBJECTS[key];
+        }
+    }
+
+    socketServer.emit('listOfUsersOnline', inactive_users);
 }
 
 function destroyUsersRoom(userObject, userIsConnected) {

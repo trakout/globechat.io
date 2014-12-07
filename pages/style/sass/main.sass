@@ -58,6 +58,16 @@ html, body
 
 // chat
 
+ul#conversationTranscript
+	// margin: -14px 0 0 0 
+	padding: 10px 14px
+	list-style: none
+	li
+		&.normal
+			color: black
+		&.transcribed
+			color: $blue
+
 .chat-parent
 	height: 100%
 	width: 100%
@@ -95,6 +105,11 @@ html, body
 	.text-history
 		height: 100%
 		padding-right: 100px
+		h3
+			display: inline-block
+			padding: 0px 10px
+			margin-top: 10px
+			color: $orange
 	.text-submit
 		position: absolute
 		width: 100%
