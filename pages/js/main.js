@@ -1,4 +1,4 @@
-var publisher, session, apiKey, socket;
+var publisher, session, apiKey, socket, imageCount = 0;
 
 function runSocket() {
 	$('#conversationSection').hide();
@@ -225,8 +225,11 @@ function loadChatRoom() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');
 			session.publish(publisher, function() {
-				var imgData = publisher.getImgData();
-				socket.emit('userImage', imgData);
+				if (imageCount == 0) {
+					imageCount++; // send this only once
+					var imgData = publisher.getImgData();
+					socket.emit('userImage', imgData);
+				}
 			});
 			$('body').fadeIn('fast');
 			checkDom();
