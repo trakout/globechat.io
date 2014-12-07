@@ -221,7 +221,8 @@ function keepTrackOfSocket(socket) {
     userObject.id = socket.id;
     userObject.name = "name_" + uuidGen.v4();
     userObject.language = "en";
-    userObject.ip = socket.handshake.address;
+    // userObject.ip = socket.handshake.address;
+    userObject.ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     // userObject.inRoom = "[]";
 
     USER_SOCKET_OBJECTS[socket.id] = userObject;
