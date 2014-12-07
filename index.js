@@ -13,6 +13,8 @@ var server = require("./server")
  
 var handle = {};
 handle["/"] = requestHandlers.sendInterface
+, handle["/chat.html"] = requestHandlers.sendChat
+, handle["/comingsoon.html"] = requestHandlers.sendComingSoon
 , handle["/main.css"] = requestHandlers.sendMainCss
 , handle["/font/campton-bold-webfont.eot"] = requestHandlers.sendFontCamptonBoldEot
 , handle["/font/campton-bold-webfont.svg"] = requestHandlers.sendFontCamptonBoldSvg

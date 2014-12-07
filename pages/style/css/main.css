@@ -2563,7 +2563,7 @@ td {
   font-weight: normal;
   font-style: normal;
 }
-body {
+html, body {
   background: #F2E3D0;
   height: 100%;
   width: 100%;
@@ -2585,6 +2585,10 @@ body {
   width: 1170px;
   margin: 0 auto;
   display: block;
+}
+.container.chat-contain {
+  width: 100%;
+  height: 100%;
 }
 
 .user-content {
@@ -2614,6 +2618,203 @@ body {
 }
 .user-content:hover span {
   top: 70%;
+}
+
+.chat {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.chat .recipient {
+  position: relative;
+  height: 75%;
+  width: 100%;
+  background: #2C3540;
+}
+.chat .recipient .viewer {
+  position: absolute;
+  height: 140px;
+  width: 190px;
+  bottom: 0 !important;
+  left: 0;
+  background: #3F4B59;
+}
+
+.text-area {
+  position: relative;
+  width: 100%;
+  height: 25%;
+  background: #fff;
+}
+.text-area .text-history {
+  height: 100%;
+  padding-right: 100px;
+}
+.text-area .text-submit {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  bottom: 0;
+  border-top: 2px solid #3F4B59;
+  overflow: hidden;
+  padding-right: 116px;
+  box-sizing: border-box;
+}
+.text-area .text-submit textarea {
+  width: 100%;
+  height: 14px;
+  resize: none;
+  padding: 8px;
+  border: none;
+  outline: none;
+  -webkit-transition: height 0.1s ease-in-out 0s;
+  -moz-transition: height 0.1s ease-in-out 0s;
+  -o-transition: height 0.1s ease-in-out 0s;
+  -ms-transition: height 0.1s ease-in-out 0s;
+  transition: height 0.1s ease-in-out 0s;
+}
+.text-area .text-button {
+  -webkit-transition: background 0.1s ease-in-out 0s;
+  -moz-transition: background 0.1s ease-in-out 0s;
+  -o-transition: background 0.1s ease-in-out 0s;
+  -ms-transition: background 0.1s ease-in-out 0s;
+  transition: background 0.1s ease-in-out 0s;
+  position: absolute;
+  height: 100%;
+  width: 100px;
+  right: 0;
+  top: 0;
+  background: #F2E3D0;
+  color: #3F4B59;
+  text-align: center;
+}
+.text-area .text-button:hover {
+  cursor: pointer;
+  background: #A69972;
+}
+.text-area .text-button .button-content {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.text-area .text-button .button-content .fa {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+}
+
+.ui-resizable {
+  position: relative;
+}
+
+.ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  display: block;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+
+.ui-resizable-n {
+  cursor: n-resize;
+  height: 7px;
+  width: 100%;
+  top: -5px;
+  left: 0;
+}
+.viewer .ui-resizable-n {
+  cursor: row-resize !important;
+}
+
+.ui-resizable-s {
+  cursor: s-resize;
+  height: 7px;
+  width: 100%;
+  bottom: -5px;
+  left: 0;
+}
+.viewer .ui-resizable-s {
+  display: none !important;
+}
+.recipient .ui-resizable-s {
+  cursor: row-resize !important;
+}
+
+.ui-resizable-e {
+  cursor: e-resize;
+  width: 7px;
+  right: -5px;
+  top: 0;
+  height: 100%;
+}
+.viewer .ui-resizable-e {
+  cursor: col-resize !important;
+}
+
+.ui-resizable-w {
+  cursor: w-resize;
+  width: 7px;
+  left: -5px;
+  top: 0;
+  height: 100%;
+}
+
+.ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  right: 1px;
+  bottom: 1px;
+}
+.viewer .ui-resizable-se {
+  display: none !important;
+}
+
+.ui-resizable-sw {
+  cursor: sw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  bottom: -5px;
+}
+
+.ui-resizable-nw {
+  cursor: nw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  top: -5px;
+}
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+  width: 9px;
+  height: 9px;
+  right: -5px;
+  top: -5px;
+}
+
+.coming {
+  width: 400px;
+  margin: 200px auto;
+}
+.coming p {
+  text-align: justify;
+}
+.coming a {
+  text-decoration: none;
+  color: #A69972;
+}
+.coming a:hover {
+  color: #A4A663;
 }
 
 /*# sourceMappingURL=main.css.map */

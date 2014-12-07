@@ -6,7 +6,7 @@
 
 // hack away
 
-body
+html, body
 	background: $white
 	height: 100%
 	width: 100%
@@ -25,6 +25,9 @@ body
 	width: 1170px
 	margin: 0 auto
 	display: block
+	&.chat-contain
+		width: 100%
+		height: 100%
 
 .user-content
 	width: 300px
@@ -51,3 +54,166 @@ body
 	&:hover 
 		span 
 			top: 70%
+
+
+// chat
+.chat
+	position: relative
+	height: 100%
+	width: 100%
+	.recipient
+		position: relative
+		height: $recipient
+		width: 100%
+		background: $darkblue
+		.viewer
+			position: absolute
+			height: 140px
+			width: 190px
+			bottom: 0 !important
+			left: 0
+			background: $blue
+
+.text-area
+	position: relative
+	width: 100%
+	height: $text
+	background: #fff
+	.text-history
+		height: 100%
+		padding-right: 100px
+	.text-submit
+		position: absolute
+		width: 100%
+		height: 30px
+		bottom: 0
+		border-top: 2px solid $blue
+		overflow: hidden
+		padding-right: 116px
+		// padding: 14px 8px
+		box-sizing: border-box
+		textarea
+			width: 100%
+			height: 14px
+			resize: none
+			padding: 8px
+			// overflow-y: hidden !important
+			border: none
+			outline: none
+			@include transition(height, 0.1s, ease-in-out, 0s)
+	.text-button
+		@include transition(background, 0.1s, ease-in-out, 0s)
+		position: absolute
+		height: 100%
+		width: 100px
+		right: 0
+		top: 0
+		background: $white
+		color: $blue
+		text-align: center
+		&:hover
+			cursor: pointer
+			background: $orange
+		.button-content
+			@include vertical-align
+			.fa
+				transform: rotate(180deg)
+				-webkit-transform: rotate(180deg)
+				-moz-transform: rotate(180deg)
+				-o-transform: rotate(180deg)
+				-ms-transform: rotate(180deg)
+
+
+
+// jquery ui port
+.ui-resizable
+	position: relative
+
+.ui-resizable-handle
+	position: absolute
+	font-size: 0.1px
+	display: block
+	-ms-touch-action: none
+	touch-action: none
+
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle
+	display: none
+
+.ui-resizable-n
+	cursor: n-resize
+	height: 7px
+	width: 100%
+	top: -5px
+	left: 0
+	.viewer &
+		cursor: row-resize !important
+
+.ui-resizable-s
+	cursor: s-resize
+	height: 7px
+	width: 100%
+	bottom: -5px
+	left: 0
+	.viewer &
+		display: none !important
+	.recipient &
+		cursor: row-resize !important
+
+.ui-resizable-e
+	cursor: e-resize
+	width: 7px
+	right: -5px
+	top: 0
+	height: 100%
+	.viewer &
+		cursor: col-resize !important
+
+.ui-resizable-w
+	cursor: w-resize
+	width: 7px
+	left: -5px
+	top: 0
+	height: 100%
+
+.ui-resizable-se
+	cursor: se-resize
+	width: 12px
+	height: 12px
+	right: 1px
+	bottom: 1px
+	.viewer &
+		display: none !important
+
+.ui-resizable-sw
+	cursor: sw-resize
+	width: 9px
+	height: 9px
+	left: -5px
+	bottom: -5px
+
+.ui-resizable-nw
+	cursor: nw-resize
+	width: 9px
+	height: 9px
+	left: -5px
+	top: -5px
+
+.ui-resizable-ne
+	cursor: ne-resize
+	width: 9px
+	height: 9px
+	right: -5px
+	top: -5px 
+
+
+// coming soon
+.coming
+	width: 400px
+	margin: 200px auto
+	p
+		text-align: justify
+	a
+		text-decoration: none
+		color: $orange
+		&:hover
+			color: $yellow

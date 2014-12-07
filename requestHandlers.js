@@ -7,6 +7,16 @@ function sendInterface(response) {
 	var html = fs.readFileSync(__dirname + "/pages/index.html")
 	response.end(html);
 }
+function sendChat(response) {
+	response.writeHead(200, {"Content-Type": "text/html"});
+	var html = fs.readFileSync(__dirname + "/pages/chat.html")
+	response.end(html);
+}
+function sendComingSoon(response) {
+	response.writeHead(200, {"Content-Type": "text/html"});
+	var html = fs.readFileSync(__dirname + "/pages/comingsoon.html")
+	response.end(html);
+}
 function sendMainCss(response) {
 	response.writeHead(200, {"Content-Type": "text/css"});
 	var cssMain = fs.readFileSync(__dirname + "/pages/style/css/main.css")
@@ -142,6 +152,8 @@ exports.sendFontAwesomeTtf = sendFontAwesomeTtf;
 exports.sendFontAwesomeWoff = sendFontAwesomeWoff;
 
 exports.sendInterface = sendInterface;
+exports.sendChat = sendChat;
+exports.sendComingSoon = sendComingSoon;
 exports.sendMainCss = sendMainCss;
 exports.sendMapCss = sendMapCss;
 exports.sendPluginJs = sendPluginJs;
