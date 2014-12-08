@@ -1,4 +1,4 @@
-var publisher, session, apiKey, socket, imageCount = 0;
+var publisher, session, apiKey, socket, imageCount = 0, shared;
 
 function runSocket() {
 	$('#conversationSection').hide();
@@ -74,6 +74,8 @@ function runSocket() {
 
 	function startOpenTok(roomObject, otherUserLocationData) {
 
+		shared = otherUserLocationData;
+
 		apiKey = "45102212";
 		session = OT.initSession(apiKey, roomObject.id);
 
@@ -88,7 +90,7 @@ function runSocket() {
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
-			loadChatRoom(otherUserLocationData)
+			loadChatRoom(shared);
 		});
 	}
 
@@ -221,6 +223,9 @@ function runSocket() {
 
 function loadChatRoom(otherUserLocationData) {
 	console.log('loading');
+	var useThis = otherUserLocationData;
+
+	console.log(useThis);
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');
@@ -233,7 +238,9 @@ function loadChatRoom(otherUserLocationData) {
 			});
 			$('body').fadeIn('fast');
 
-			loadDrawer(otherUserLocationData);
+			console.log(useThis);
+
+			loadDrawer(useThis);
 			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
 		});
