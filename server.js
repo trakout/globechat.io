@@ -70,11 +70,8 @@ function initSocketIO(httpServer,debug)
             console.log('starting chat between '+userId+' and '+socket.id);
 
             var userObject = USER_SOCKET_OBJECTS[userId];
-            if (userObject == null || userObject.inRoom) {
-                return;
-            }
-
-            if (USER_SOCKET_OBJECTS[socket.id]==null || USER_SOCKET_OBJECTS[userId]==null) {
+            if (userObject == null || userObject.inRoom || USER_SOCKET_OBJECTS[socket.id]==null || USER_SOCKET_OBJECTS[userId]==null) {
+                socket.emit('refreshChatRequests');
                 return;
             }
 

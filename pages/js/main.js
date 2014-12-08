@@ -200,6 +200,11 @@ function runSocket() {
 		//loadMainPage();
 	});
 
+	socket.on('refreshChatRequests', function () {
+		console.log('emptying chat requests');
+		$('#chatRequests').empty();
+	});
+
 	function requestToChatWithUser(userId) {
 		socket.emit('sendChatRequest', userId);
 	}
