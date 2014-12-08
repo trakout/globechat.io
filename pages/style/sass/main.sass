@@ -13,9 +13,11 @@ html, body
 	font-family: $regular
 
 .logo
-	position: relative
+	border: 3px solid $white
 	display: block
 	margin: 20px auto
+	padding: 20px
+	position: relative
 	width: 200px
 
 .hidden
@@ -37,6 +39,7 @@ html, body
 	margin: 45px
 	position: relative
 	overflow: hidden
+	cursor: pointer
 	img
 		position: absolute
 		top: 0
@@ -54,6 +57,53 @@ html, body
 	&:hover 
 		span 
 			top: 70%
+
+.blue-container 
+	background: $darkblue
+	width: 100%
+	color: #ffffff
+	border-top: 1px solid #ffffff
+	border-bottom: 1px solid #ffffff
+	margin-bottom: 30px
+
+.change-name
+	width: 1170px
+	margin: 0 auto
+	padding: 20px
+	input, select
+		padding: 11px
+		font-size: 20px
+		float: left
+	select
+		float: none
+	form, .select-language
+		display: block
+		margin: 0 auto
+		width: 400px
+
+h3
+	font-size: 20px
+	display: block
+	width: 100%
+	margin: 10px 0
+
+.button 
+	background-color: #d37961
+	border: medium none
+	color: $white
+	cursor: pointer
+	display: inline-block
+	font-size: 1rem
+	font-weight: normal !important
+	line-height: normal
+	margin: 0 0 1.25rem
+	padding: 1.0625rem 2rem 1rem
+	position: relative
+	text-align: center
+	text-decoration: none
+	transition: background-color 300ms ease-out 0s
+	&:hover 
+		background: $yellow
 
 ul.thumb
 	list-style: none
@@ -73,9 +123,6 @@ ul.thumb
 
 
 // chat
-
-
-
 span.helv
 	font-family: $regreg
 .conversationSection

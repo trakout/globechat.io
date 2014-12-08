@@ -175,11 +175,11 @@ function runSocket() {
 			console.log(userObject);
 			if (userObject.hasOwnProperty('image')) {
 				if (userObject.id != _userObject.id) {
-					$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">' + userObject.name + '<img src="data:image/png;base64,' + userObject.image + '" /></li>');
+					$('#onlineUsers').append('<li class="onlineUser user-content" data-user-id="'+userObject.id+'"><i class="fa fa-dot-circle-o"></i>' + userObject.name + '<img src="data:image/png;base64,' + userObject.image + '" /></li>');
 				}
 			} else {
 				if (userObject.id != _userObject.id) {
-					$('#onlineUsers').append('<li class="onlineUser" data-user-id="'+userObject.id+'">' + userObject.name + '</li>');
+					$('#onlineUsers').append('<li class="onlineUser user-content" data-user-id="'+userObject.id+'"><i class="fa fa-dot-circle-o"></i>' + userObject.name + '</li>');
 				}
 			}
 		}
@@ -266,7 +266,7 @@ function loadChatRoom(otherUserLocationData) {
 
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
-			publisher = OT.initPublisher(apiKey, 'videoSelfie');
+			publisher = OT.initPublisher(apiKey, 'videoSelfie'); 
 			session.publish(publisher, function() {
 				if (imageCount == 0) {
 					imageCount++; // send this only once
