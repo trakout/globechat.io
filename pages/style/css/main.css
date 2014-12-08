@@ -2587,6 +2587,7 @@ html, body {
   width: 1170px;
   margin: 0 auto;
   display: block;
+  position: relative;
 }
 .container.chat-contain {
   width: 100%;
@@ -2602,6 +2603,10 @@ html, body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+}
+.user-content i {
+  position: absolute;
+  z-index: 999;
 }
 .user-content i.online {
   color: green;
@@ -2686,6 +2691,12 @@ h3 {
 }
 .button:hover {
   background: #A4A663;
+}
+
+.notification {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 ul.thumb {
