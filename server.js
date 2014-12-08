@@ -69,6 +69,15 @@ function initSocketIO(httpServer,debug)
             dogstatsd.increment('server.acceptChatRequest');
             console.log('starting chat between '+userId+' and '+socket.id);
 
+            var userObject = USER_SOCKET_OBJECTS[userId];
+            if (userObject == null || userObject.inRoom) {
+                return;
+            }
+
+            if (USER_SOCKET_OBJECTS[socket.id]==null || USER_SOCKET_OBJECTS[userId]==null) {
+                return;
+            }
+
             createRoom(socket.id, userId, function (roomObject) {
                 console.log(roomObject);
 
@@ -284,12 +293,15 @@ function destroyUsersRoom(userObject, userIsConnected) {
                 userSocket = socketServer.sockets.connected[otherUser.id]
                 //TODO: notify other user that he has been disconnected
                 userSocket.emit('conversationEnded');
-                delete otherUser['inRoom']
+                // delete otherUser['inRoom']
                 userSocket.leave(roomKey)
             }
+            delete otherUser['inRoom']
         }
 
         delete CHAT_ROOMS[roomKey]
+
+        updateUsersWithOnlineUsers();
     }
 }
 
