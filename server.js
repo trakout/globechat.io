@@ -192,7 +192,7 @@ function initSocketIO(httpServer,debug)
             }
 
             destroyUsersRoom(userObject, true);
-            userSocket.emit('conversationEnded');
+            socket.emit('conversationEnded');
             destroyUsersRoom(userObject2, true);
         });
 
