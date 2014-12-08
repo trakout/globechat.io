@@ -15,7 +15,8 @@ But, what do I talk to them about? We've got you covered! On the right pane, you
 
 ## Screenshots
 
-Coming up!
+![](https://github.com/trakout/TeamBananaStand.Submission/blob/master/images/login.gif)
+![](https://github.com/trakout/TeamBananaStand.Submission/blob/master/images/chat.gif)
 
 ## APIs/Services used
 * __[OpenTok](https://tokbox.com/opentok/)__ - Allows face-to-face video chat
