@@ -268,7 +268,7 @@ function loadDrawer(val) {
 	var m = d.getMinutes();
 	var h = d.getHours();
 
-	$('.drawer .time').html('Their local time is: <br>' + m + ':' + h);
+	$('.drawer .time').html('Their local time is: <br>' + h + ':' + m);
 
 } // loadDrawer
 
