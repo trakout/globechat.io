@@ -255,7 +255,7 @@ function sendString(val) {
 }
 
 function loadDrawer(ughghghgh) {
-	var val = ughghghgh;
+	var val = JSON.parse(ughghghgh);
 
 	console.log(val);
 	$('.drawer .location .city').html(val.city);
@@ -263,13 +263,13 @@ function loadDrawer(ughghghgh) {
 	$('.drawer .location .time').html(val.city);
 
 	$('.drawer .weather .icon').html('<img src="' + val.icon + '" />');
-	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' &#176;C <br>' + val.weather);
+	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' <span class="helv">&#176;</span>C <br>' + val.weather);
 
 	var d = new Date(val.local_time);
 	var m = d.getMinutes();
 	var h = d.getHours();
 
-	$('.drawer .time').html('Their local time is: <br>' + m + ':' + h);
+	$('.drawer .time').html('Local Time: <br>' + m + ':' + h);
 
 } // loadDrawer
 
