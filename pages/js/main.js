@@ -255,6 +255,7 @@ function loadHome() {
 			getListOfOnlineUsers();
 			console.log('chat ended .. jason reconnect us!');
 			checkDom();
+			indexClickHandles();
 		});
 	});
 } // loadHome
@@ -309,6 +310,35 @@ function loadDrawer(ughghghgh) {
 
 
 } // loadDrawer
+
+function indexClickHandles() {
+	$('#onlineUsers').on('click','li.onlineUser',function() {    
+		requestToChatWithUser($(this).data("user-id"));
+	});
+
+	$('#chatRequests').on('click','li.chatRequest',function() {    
+		console.log($(this).data("user-id"));
+		acceptChatRequest($(this).data("user-id"));
+	});
+
+	$('#userLanguage').on('change', function (e) {
+		var optionSelected = $(this).find("option:selected");
+		var valueSelected  = optionSelected.val();
+		changeUserLanguage(valueSelected);
+	});
+
+	$('body').on('click', '#closeChat', function() {    
+		console.log('closing');
+		closeConversation();
+	});
+
+	$('#changeNameForm').submit(function(){
+
+		// send to the server the message
+		socket.emit('changeName', $('#usernameInput').val());
+		return false;
+	});
+}
 
 // keyboard shortcuts
 function enterShort() {
