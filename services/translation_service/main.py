@@ -14,10 +14,16 @@ def get_info_from_yandex(source_lang, dest_lang, string):
     data = yandex_request.read()
     return data
 
+def same_language_response(lang, string):
+    return {"code": 200, "lang": lang + "-" + lang, "text": string}
+
 @route('/<source_lang>/<dest_lang>')
 def index(source_lang, dest_lang):
     raw_string = request.query['string']
     string = re.sub(' +', '+', raw_string)
+    if source_lang == dest_lang:
+        return same_language_response(source_lang, string)
+
     data = get_info_from_yandex(source_lang, dest_lang, string)
     return data
 
