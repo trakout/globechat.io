@@ -25,8 +25,11 @@ Coming up!
 * __[Yandex](https://www.yandex.com/)__ - Translates any text from one language to another
 * __[Datadog](https://www.datadoghq.com/)__ - Keeping track of server information and metrics
 * __[Nginx](http://wiki.nginx.org/Main)__ - HTTP server and reverse proxy
+* And of course, __[Koding](https://koding.com/)__ - cloud-based development environment complete with free VMs
 
 ## Packages used
 * __[Web Speech API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)__ - Voice recognition in your browser
 * __[Socket.io](http://socket.io/)__ - RealTime engine in Node.JS
 * __[gulp.js](http://gulpjs.com/)__ - The streaming build system
+
+Oh, and we also have accounts with Count.ly, oDesk.com and Elance.com :)
