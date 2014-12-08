@@ -96,6 +96,7 @@ function runSocket() {
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
+			startSpeechRecognition();
 			loadChatRoom(shared);
 		});
 	}
@@ -144,7 +145,7 @@ function runSocket() {
 		$('#conversationSection').show();
 
 		startOpenTok(roomObject, otherUserLocationData);
-		startSpeechRecognition();
+		// startSpeechRecognition();
 	});
 
 	socket.on('receiveChatRequest', function (userObject) {
@@ -265,7 +266,7 @@ function loadChatRoom(otherUserLocationData) {
 
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
-			publisher = OT.initPublisher(apiKey, 'videoSelfie');
+			publisher = OT.initPublisher(apiKey, 'videoSelfie'); 
 			session.publish(publisher, function() {
 				if (imageCount == 0) {
 					imageCount++; // send this only once
