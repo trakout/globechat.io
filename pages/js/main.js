@@ -129,7 +129,7 @@ function runSocket() {
 				$('#conversationSection h3').remove();
 			});
 		}
-		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
+		$('#conversationTranscript').append($('<li class="transcribed">').append($(msg)));
 	});
 
 	socket.on('startChat', function (roomObject, otherUserLocationData) {
@@ -238,8 +238,6 @@ function loadChatRoom(otherUserLocationData) {
 			});
 			$('body').fadeIn('fast');
 
-			console.log(useThis);
-
 			loadDrawer(useThis);
 			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
@@ -256,19 +254,23 @@ function sendString(val) {
 	socket.emit('chatMessage', val);
 }
 
-function loadDrawer(val) {
+function loadDrawer(ughghghgh) {
+	var val = JSON.parse(ughghghgh);
+
+	console.log(val);
 	$('.drawer .location .city').html(val.city);
 	$('.drawer .location .country').html(val.country);
 	$('.drawer .location .time').html(val.city);
 
 	$('.drawer .weather .icon').html('<img src="' + val.icon + '" />');
-	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' &#176;C <br>' + val.weather);
+	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' <span class="helv">&#176;</span>C <br>' + val.weather);
 
 	var d = new Date(val.local_time);
 	var m = d.getMinutes();
 	var h = d.getHours();
 
-	$('.drawer .time').html('Their local time is: <br>' + h + ':' + m);
+	$('.drawer .time').html('Local Time: <br>' + m + ':' + h);
+
 
 } // loadDrawer
 
