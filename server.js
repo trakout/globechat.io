@@ -176,6 +176,26 @@ function initSocketIO(httpServer,debug)
             }
         });
 
+        socket.on('endConversation', function () {
+
+            var userObject = USER_SOCKET_OBJECTS[socket.id];
+            if (!("inRoom" in userObject)) {
+                return;            
+            }
+
+            var room = userObject.inRoom;
+            var userObject2 = findUserInRoomExcluding(room, socket.id);
+
+            if (userObject2 == null) {
+                console.log('could not find :' + userObject2.id);
+                return;
+            }
+
+            destroyUsersRoom(userObject, true);
+            userSocket.emit('conversationEnded');
+            destroyUsersRoom(userObject2, true);
+        });
+
         // socket.emit('onconnection', {pollOneValue:sendData});
     
         // socketServer.on('update', function(data) {
@@ -245,6 +265,11 @@ function updateUsersWithOnlineUsers() {
 function destroyUsersRoom(userObject, userIsConnected) {
     if ('inRoom' in userObject) {
         var roomKey = userObject.inRoom;
+
+        if (CHAT_ROOMS[roomKey] == null) {
+            return;
+        }
+
         var users = CHAT_ROOMS[roomKey].users;
         var userSocket = null;
 
@@ -258,6 +283,7 @@ function destroyUsersRoom(userObject, userIsConnected) {
             if (otherUser.id != userObject.id) {
                 userSocket = socketServer.sockets.connected[otherUser.id]
                 //TODO: notify other user that he has been disconnected
+                userSocket.emit('conversationEnded');
                 delete otherUser['inRoom']
                 userSocket.leave(roomKey)
             }

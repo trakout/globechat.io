@@ -27,6 +27,11 @@ function runSocket() {
 		changeUserLanguage(valueSelected);
 	});
 
+	$('body').on('click', '#closeChat', function() {    
+		console.log('closing');
+		closeConversation();
+	});
+
 	/*************************************************************************************
 
 	* SPEECH RECOGNITION RELATED STUFF
@@ -188,6 +193,11 @@ function runSocket() {
 		});
 	});
 
+	socket.on('conversationEnded', function() {
+		console.log('conversation ended...');
+		//loadMainPage();
+	});
+
 	function requestToChatWithUser(userId) {
 		socket.emit('sendChatRequest', userId);
 	}
@@ -202,6 +212,10 @@ function runSocket() {
 
 	function changeUserLanguage(language) {
 		socket.emit('changeUserLanguage', language);
+	}
+
+	function closeConversation() {
+		socket.emit('endConversation');
 	}
 
 	// function sendCandidateEvent(event) {
