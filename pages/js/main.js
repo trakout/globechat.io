@@ -85,8 +85,6 @@ function runSocket() {
 
 		session.connect(roomObject.token, function(error) {
 			console.log('OpenTok session connected');
-
-			loadChatRoom(otherUserLocationData);
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
@@ -133,7 +131,7 @@ function runSocket() {
 
 	socket.on('startChat', function (roomObject, otherUserLocationData) {
 		console.log('starting chat');
-		console.log(otherUserLocationData);
+
 		$('#conversationSection').show();
 
 		startOpenTok(roomObject, otherUserLocationData);
@@ -233,7 +231,10 @@ function loadChatRoom(otherUserLocationData) {
 				}
 			});
 			$('body').fadeIn('fast');
-			$('.drawer .location').html(otherUserLocationData);
+
+			// bee
+			loadDrawer(otherUserLocationData);
+			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
 		});
 	});
@@ -247,6 +248,22 @@ function sendString(val) {
 	}
 	socket.emit('chatMessage', val);
 }
+
+function loadDrawer(val) {
+	$('.drawer .location .city').html(val.city);
+	$('.drawer .location .country').html(val.country);
+	$('.drawer .location .time').html(val.city);
+
+	$('.drawer .weather .icon').html('<img src="' + val.icon + '" />');
+	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' &#176;C <br>' + val.weather);
+
+	var d = new Date(val.local_time);
+	var m = d.getMinutes();
+	var h = d.getHours();
+
+	$('.drawer .time').html('Their local time is: <br>' + m + ':' + h);
+
+} // loadDrawer
 
 // keyboard shortcuts
 function enterShort() {
