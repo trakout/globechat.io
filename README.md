@@ -16,6 +16,7 @@ But, what do I talk to them about? We've got you covered! On the right pane, you
 Coming up!
 
 ## APIs used
+* __[OpenTok](https://tokbox.com/opentok/)__ - Allows face-to-face video chat
 * __[ip-api.com](http://ip-api.com)__ - Location information based on the IP
 * __[OpenWeatherMap](http://openweathermap.org/)__ - Gives you the weather location for any area
 * __[The Google Time Zone API](https://developers.google.com/maps/documentation/timezone/)__ - Gives you the timezone in any location
