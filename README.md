@@ -29,6 +29,7 @@ Coming up!
 
 ## Packages used
 * __[Web Speech API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)__ - Voice recognition in your browser
+* __[Node.js](http://nodejs.org/)__ - An open source, cross-platform runtime environment for server-side and networking applications
 * __[Socket.io](http://socket.io/)__ - RealTime engine in Node.JS
 * __[gulp.js](http://gulpjs.com/)__ - The streaming build system
 
