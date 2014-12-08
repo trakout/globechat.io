@@ -178,7 +178,10 @@ function initSocketIO(httpServer,debug)
             dogstatsd.increment('server.sendImage');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             if (userObject) {
-                userObject.image = imageData;
+                if (!(userObject.hasOwnProperty('imgBlock'))) {
+                    userObject.image = imageData;
+                    userObject.imgBlock = '1';
+                }
             }
         });
 
