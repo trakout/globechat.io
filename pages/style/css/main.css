@@ -2603,8 +2603,13 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
-.user-content i {
+.user-content i.online {
   color: green;
+  font-size: 30px !important;
+  margin: 10px;
+}
+.user-content i.offline {
+  color: red;
   font-size: 30px !important;
   margin: 10px;
 }
@@ -2686,8 +2691,10 @@ h3 {
 ul.thumb {
   list-style: none;
   padding: 10px 0;
-  width: 100%;
+  margin: 0;
+  padding: 0;
   overflow: auto;
+  float: left;
 }
 ul.thumb li {
   cursor: pointer;

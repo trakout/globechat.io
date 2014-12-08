@@ -40,8 +40,15 @@ html, body
 	position: relative
 	overflow: hidden
 	cursor: pointer
-	i 
+	i
+		position: absolute;
+		z-index: 999;
+	i.online
 		color: green
+		font-size: 30px !important
+		margin: 10px 
+	i.offline
+		color: red
 		font-size: 30px !important
 		margin: 10px 
 	img
@@ -112,8 +119,10 @@ h3
 ul.thumb
 	list-style: none
 	padding: 10px 0
-	width: 100%
+	margin: 0
+	padding: 0
 	overflow: auto
+	float: left
 	li
 		cursor: pointer
 		width: 300px
