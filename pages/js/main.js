@@ -88,6 +88,7 @@ function runSocket() {
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
+			loadChatRoom(otherUserLocationData)
 		});
 	}
 
@@ -232,7 +233,6 @@ function loadChatRoom(otherUserLocationData) {
 			});
 			$('body').fadeIn('fast');
 
-			// bee
 			loadDrawer(otherUserLocationData);
 			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
