@@ -68,6 +68,7 @@ function runSocket() {
 	}
 
 	function stopSpeechRecognition() {
+		_rec.stop();
 		_rec = null;
 	}
 
@@ -196,7 +197,9 @@ function runSocket() {
 	});
 
 	socket.on('conversationEnded', function() {
-		console.log('conversation ended...');
+		session.disconnect();
+		session = null;
+		loadHome();
 		//loadMainPage();
 	});
 
@@ -204,26 +207,6 @@ function runSocket() {
 		console.log('emptying chat requests');
 		$('#chatRequests').empty();
 	});
-
-	function requestToChatWithUser(userId) {
-		socket.emit('sendChatRequest', userId);
-	}
-
-	function acceptChatRequest(userId) {
-		socket.emit('acceptChatRequest', userId);
-	}
-
-	function sendTranscribedText(text) {
-		socket.emit('transcribedText', text);
-	}
-
-	function changeUserLanguage(language) {
-		socket.emit('changeUserLanguage', language);
-	}
-
-	function closeConversation() {
-		socket.emit('endConversation');
-	}
 
 	// function sendCandidateEvent(event) {
 	// 	socket.emit('sendCandidateEvent', {
@@ -240,11 +223,46 @@ function runSocket() {
 	// }
 } // runSocket
 
+function requestToChatWithUser(userId) {
+	socket.emit('sendChatRequest', userId);
+}
+
+function acceptChatRequest(userId) {
+	socket.emit('acceptChatRequest', userId);
+}
+
+function sendTranscribedText(text) {
+	socket.emit('transcribedText', text);
+}
+
+function changeUserLanguage(language) {
+	socket.emit('changeUserLanguage', language);
+}
+
+function closeConversation() {
+	socket.emit('endConversation');
+}
+	
+function getListOfOnlineUsers() {
+	socket.emit('onlineUsers');	
+}
+
+
+function loadHome() {
+	$('body').fadeOut('fast', function() {
+		$('body').load('/ .container', function() {
+			$('body').fadeIn('fast');
+			getListOfOnlineUsers();
+			console.log('chat ended .. jason reconnect us!');
+			checkDom();
+			indexClickHandles();
+		});
+	});
+} // loadHome
+
 function loadChatRoom(otherUserLocationData) {
-	console.log('loading');
 	var useThis = otherUserLocationData;
 
-	console.log(useThis);
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');
@@ -292,6 +310,35 @@ function loadDrawer(ughghghgh) {
 
 
 } // loadDrawer
+
+function indexClickHandles() {
+	$('#onlineUsers').on('click','li.onlineUser',function() {    
+		requestToChatWithUser($(this).data("user-id"));
+	});
+
+	$('#chatRequests').on('click','li.chatRequest',function() {    
+		console.log($(this).data("user-id"));
+		acceptChatRequest($(this).data("user-id"));
+	});
+
+	$('#userLanguage').on('change', function (e) {
+		var optionSelected = $(this).find("option:selected");
+		var valueSelected  = optionSelected.val();
+		changeUserLanguage(valueSelected);
+	});
+
+	$('body').on('click', '#closeChat', function() {    
+		console.log('closing');
+		closeConversation();
+	});
+
+	$('#changeNameForm').submit(function(){
+
+		// send to the server the message
+		socket.emit('changeName', $('#usernameInput').val());
+		return false;
+	});
+}
 
 // keyboard shortcuts
 function enterShort() {

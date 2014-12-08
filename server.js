@@ -178,7 +178,10 @@ function initSocketIO(httpServer,debug)
             dogstatsd.increment('server.sendImage');
             var userObject = USER_SOCKET_OBJECTS[socket.id];
             if (userObject) {
-                userObject.image = imageData;
+                if (!(userObject.hasOwnProperty('imgBlock'))) {
+                    userObject.image = imageData;
+                    userObject.imgBlock = '1';
+                }
             }
         });
 
@@ -200,6 +203,11 @@ function initSocketIO(httpServer,debug)
             destroyUsersRoom(userObject, true);
             socket.emit('conversationEnded');
             destroyUsersRoom(userObject2, true);
+        });
+
+        socket.on('onlineUsers', function () {
+            var inactive_users = allInactiveUsers();
+            socket.emit('listOfUsersOnline', inactive_users);
         });
 
         // socket.emit('onconnection', {pollOneValue:sendData});
@@ -256,14 +264,19 @@ function keepTrackOfSocket(socket) {
     return userObject;
 }
 
-function updateUsersWithOnlineUsers() {
-    inactive_users = {};
-
+function allInactiveUsers() {
+    var inactive_users = {};
     for (var key in USER_SOCKET_OBJECTS) {
         if (!('inRoom' in USER_SOCKET_OBJECTS[key])) {
             inactive_users[key] = USER_SOCKET_OBJECTS[key];
         }
     }
+    return inactive_users;
+}
+
+function updateUsersWithOnlineUsers() {
+    
+    var inactive_users = allInactiveUsers();
 
     socketServer.emit('listOfUsersOnline', inactive_users);
 }
@@ -354,10 +367,14 @@ function universalTranslator(fromLang, toLang, msg, callback) {
         if (err) {
             return console.log(err);
         }
-        var info = JSON.parse(body);
-        console.log(info);
-        console.log(info.text);
-        callback(info.text[0]);
+        try {
+            var info = JSON.parse(body);
+            console.log(info);
+            console.log(info.text);
+            callback(info.text[0]);
+        } catch (e) {
+            console.log(e+': '+ body);
+        }
     });
 }
 
