@@ -2603,6 +2603,11 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
+.user-content i {
+  color: green;
+  font-size: 30px !important;
+  margin: 10px;
+}
 .user-content img {
   position: absolute;
   top: 0;
@@ -2688,7 +2693,7 @@ ul.thumb li {
   cursor: pointer;
   width: 300px;
   height: 300px;
-  background: #A69972;
+  background: #ffffff;
   float: left;
   margin: 45px;
   position: relative;
