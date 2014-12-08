@@ -371,14 +371,10 @@ function translateTextAndEmitBack(socket, msg) {
             return;
         }
 
-        universalTranslator(userObject2.language, userObject.language, msg, function (translatedMsg) {
-            socket.emit('transcribedText', userObject.name + ": " + translatedMsg);                   
-
-            var user2Socket = socketServer.sockets.connected[userObject2.id];
-
-            universalTranslator(userObject.language, userObject2.language, msg, function (translatedMsg) {
-                user2Socket.emit('transcribedText', userObject.name + ": " + translatedMsg);
-            });
+        socket.emit('transcribedText', "<span class='mine'>" + msg + "</span>"); 
+        var user2Socket = socketServer.sockets.connected[userObject2.id];
+        universalTranslator(userObject.language, userObject2.language, msg, function (translatedMsg) {
+            user2Socket.emit('transcribedText', "<span class='theirs'>" + translatedMsg + "</span>");
         });
 
         // socketServer.to([room]).emit('transcribedText', msg);
