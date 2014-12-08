@@ -5,7 +5,7 @@ Team Banana Stand presents to you GlobeChat.io! [Check it out!](http://globechat
 
 We also have a [Koding VM URL!](http://utkkf5ff034f.trakout.koding.io/)
 
-GlobeChat.io is a video chatting service that lets you talk to anyone in the world. There are many like this (Omegle and ChatRoulette] but where we differ from them is that we also provide translation. So, really, you can talk to anyone in the world!
+GlobeChat.io is a video chatting service that lets you talk to anyone in the world. There are many like this (Omegle and ChatRoulette) but where we differ from them is that we also provide translation. So, really, you can talk to anyone in the world!
 
 So, you select a language that you will speak in. Then, invite someone to chat with you.
 
