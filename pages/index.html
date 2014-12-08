@@ -37,36 +37,39 @@
 	<!--Main Page -->
 	<div class="container">
 		<img src="logo_globe.png" class="logo">
-
+	</div>
 		 <!-- <div id="videoPublish" class="videoPublish"></div> -->
 
+	<div class="blue-container">
+		<div class="change-name">
+			<form  id="changeNameForm" action="">
+				<h3>Enter your name:</h3>
+				<input id="usernameInput" autocomplete="off" placeholder="Enter your name"><button class="button">Change Name</button>
+			</form>
 
-	<form id="changeNameForm" action="">
-		<input id="usernameInput" autocomplete="off" /><button>Change Name</button>
-	</form>
-
-	<!-- <video id="localVideo" width="320" height="240" autoplay></video>   -->
-	
-	<select id="userLanguage">
-		<option value="zh">Chinese</option>
-		<option value="en" selected>English</option>
-		<option value="fr">French</option>
-		<option value="de">German</option>
-		<option value="it">Italian</option>
-		<option value="es">Spanish</option>
-
-	</select>
+			<!-- <video id="localVideo" width="320" height="240" autoplay></video>   -->
+			
+			<div class="select-language">
+				<h3>Select a Lanaugage:</h3>
+				<select id="userLanguage">
+					<option value="zh">Chinese</option>
+					<option value="en" selected>English</option>
+					<option value="fr">French</option>
+					<option value="de">German</option>
+					<option value="it">Italian</option>
+					<option value="es">Spanish</option>
+				</select>
+			</div>
+		</div>
+	</div>
 
 	<!--dd-->
+	<div class="container">
 	<h3 class="requestTop">Chat requests (click to start chat):</h3>
 	<ul id="chatRequests" class="thumb"></ul>
 
 	<h3>Online users (click to send request):</h3>
 	<ul id="onlineUsers" class="thumb"></ul>
-
-	
-
-
 
 		<div class="user-content">
 			<img src="image-1_globe.png">
