@@ -202,6 +202,11 @@ function initSocketIO(httpServer,debug)
             destroyUsersRoom(userObject2, true);
         });
 
+        socket.on('onlineUsers', function () {
+            var inactive_users = allInactiveUsers();
+            socket.emit('listOfUsersOnline', inactive_users);
+        });
+
         // socket.emit('onconnection', {pollOneValue:sendData});
     
         // socketServer.on('update', function(data) {
@@ -256,14 +261,19 @@ function keepTrackOfSocket(socket) {
     return userObject;
 }
 
-function updateUsersWithOnlineUsers() {
-    inactive_users = {};
-
+function allInactiveUsers() {
+    var inactive_users = {};
     for (var key in USER_SOCKET_OBJECTS) {
         if (!('inRoom' in USER_SOCKET_OBJECTS[key])) {
             inactive_users[key] = USER_SOCKET_OBJECTS[key];
         }
     }
+    return inactive_users;
+}
+
+function updateUsersWithOnlineUsers() {
+    
+    var inactive_users = allInactiveUsers();
 
     socketServer.emit('listOfUsersOnline', inactive_users);
 }

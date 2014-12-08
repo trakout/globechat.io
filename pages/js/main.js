@@ -68,6 +68,7 @@ function runSocket() {
 	}
 
 	function stopSpeechRecognition() {
+		_rec.stop();
 		_rec = null;
 	}
 
@@ -196,6 +197,8 @@ function runSocket() {
 	});
 
 	socket.on('conversationEnded', function() {
+		session.disconnect();
+		session = null;
 		loadHome();
 		//loadMainPage();
 	});
@@ -240,11 +243,16 @@ function runSocket() {
 	// }
 } // runSocket
 
+function getListOfOnlineUsers() {
+	socket.emit('onlineUsers');	
+}
+
 
 function loadHome() {
 	$('body').fadeOut('fast', function() {
 		$('body').load('/ .container', function() {
 			$('body').fadeIn('fast');
+			getListOfOnlineUsers();
 			console.log('chat ended .. jason reconnect us!');
 			checkDom();
 		});
