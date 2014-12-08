@@ -196,7 +196,7 @@ function runSocket() {
 	});
 
 	socket.on('conversationEnded', function() {
-		console.log('conversation ended...');
+		loadHome();
 		//loadMainPage();
 	});
 
@@ -240,11 +240,20 @@ function runSocket() {
 	// }
 } // runSocket
 
+
+function loadHome() {
+	$('body').fadeOut('fast', function() {
+		$('body').load('/ .container', function() {
+			$('body').fadeIn('fast');
+			console.log('chat ended .. jason reconnect us!');
+			checkDom();
+		});
+	});
+} // loadHome
+
 function loadChatRoom(otherUserLocationData) {
-	console.log('loading');
 	var useThis = otherUserLocationData;
 
-	console.log(useThis);
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');

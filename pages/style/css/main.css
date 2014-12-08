@@ -2711,6 +2711,30 @@ ul#conversationTranscript li span.theirs::before {
   height: 100%;
   width: 100%;
 }
+.chat button#closeChat {
+  -webkit-transition: all 0.1s ease-in-out 0s;
+  -moz-transition: all 0.1s ease-in-out 0s;
+  -o-transition: all 0.1s ease-in-out 0s;
+  -ms-transition: all 0.1s ease-in-out 0s;
+  transition: all 0.1s ease-in-out 0s;
+  font-family: "camptonlight", Helvetica, Arial, sans-serif;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  background: #F2E3D0;
+  border: 0;
+  width: 100px;
+  color: #2C3540;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  outline: none !important;
+  padding-top: 4px;
+}
+.chat button#closeChat:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
 .chat .recipient {
   position: relative;
   height: 75%;
@@ -2744,7 +2768,7 @@ ul#conversationTranscript li span.theirs::before {
   text-align: center;
 }
 .chat .recipient .drawer .location {
-  padding-top: 34px;
+  padding-top: 47px;
 }
 .chat .recipient .pHandle {
   -webkit-transition: all 0.2s ease-in-out 0s;
