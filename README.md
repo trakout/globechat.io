@@ -1,7 +1,7 @@
 # TeamBananaStand
 
 ## Description
-Team Banana Stand presents to you GlobeChat.io! [Check it out!](globechat.io)
+Team Banana Stand presents to you GlobeChat.io! [Check it out!](http://globechat.io)
 
 GlobeChat.io is a video chatting service that lets you talk to anyone in the world. There are many like this (Omegle and ChatRoulette] but where we differ from them is that we also provide translation. So, really, you can talk to anyone in the world!
 
