@@ -74,20 +74,62 @@ ul.thumb
 
 // chat
 
+
+
 span.helv
 	font-family: $regreg
+.conversationSection
+	overflow: auto
 
 ul#conversationTranscript
 	// margin: -14px 0 0 0 
 	padding: 10px 14px
 	list-style: none
+	margin: 0
 	li
 		font-family: $regreg
 		font-weight: 300
+		width: 100%
+		overflow: auto 
+		margin-bottom: 1px
+		overflow-x: hidden
 		&.normal
 			color: black
 		&.transcribed
 			color: $blue
+		span
+			position: relative
+			display: block
+			padding: 3px 6px
+			border-radius: 2px
+			&.mine
+				float: right
+				background: rgba(166, 153, 114, 0.6)
+				margin-right: 7px
+				&::after
+					position: absolute
+					content: ''
+					height: 0
+					width: 0
+					right: -12px
+					top: 5px
+					border: 6px solid transparent
+					border-left: 6px solid rgba(166, 153, 114, 0.6)
+			&.theirs
+				float: left 
+				background: rgba(164, 166, 99, 0.6)
+				margin-left: 7px
+				&::before
+					position: absolute
+					content: ''
+					height: 0
+					width: 0
+					top: 5px
+					left: -12px
+					border: 6px solid transparent
+					border-right: 6px solid rgba(164, 166, 99, 0.6)
+				
+
 
 .chat-parent
 	height: 100%
@@ -102,6 +144,7 @@ ul#conversationTranscript
 		width: 100%
 		background: $darkblue
 		.drawer
+			@include transition(all, 0.2s, ease-in-out, 0s)
 			width: 100px
 			background: $blue
 			position: absolute
@@ -112,8 +155,17 @@ ul#conversationTranscript
 			-moz-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
 			box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
 			z-index: 3
+			color: $white
+			overflow: hidden
+			&.active
+				-webkit-transform: translateX(100px)
+			.location, .weather
+				padding: 13px
+				text-align: center
+			.location
+				padding-top: 34px
 		.pHandle
-			@include transition(all, 0.1s, ease-in-out, 0s)
+			@include transition(all, 0.2s, ease-in-out, 0s)
 			position: absolute
 			width: 36px
 			height: 110px
@@ -126,6 +178,12 @@ ul#conversationTranscript
 			-moz-box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
 			box-shadow: -2px 0px 5px -2px rgba(0,0,0,0.6)
 			opacity: 0.6
+			&.active
+				opacity: 0.2
+				-webkit-transform: translateX(100px)
+				&:hover
+					opacity: 0.6
+					-webkit-transform: translateX(94px)
 			&::before
 				position: absolute
 				content: ''

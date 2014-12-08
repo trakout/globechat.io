@@ -277,6 +277,16 @@ function loadDrawer(ughghghgh) {
 // keyboard shortcuts
 function enterShort() {
 
+	$('.pHandle').click(function() {
+		if ($('.drawer').hasClass('active')) {
+			$('.pHandle').removeClass('active');
+			$('.drawer').removeClass('active');
+		} else {
+			$('.pHandle').addClass('active');
+			$('.drawer').addClass('active');
+		}
+	});
+
 	$('.text-button').click(function() {
 		sendString($('.text-submit textarea').val());
 		TweenMax.to('.text-submit textarea', 0.2, {opacity:0, onComplete:function() {
@@ -324,15 +334,18 @@ function autoResize(e) {
 	    if ($('textarea').val().length == 0) {
 	    	ele.style.height = "14px";
 	    	$('.text-submit').css('height', "30px");
+	    	$('.conversationSection').css('height', ($('.text-history').height() - $('.text-submit').height()) + 'px');
 	    }
 	    if (t > 0) {
 	        // console.log(tarHeight);
 	        ele.style.height = (tarHeight - 16) + "px";
 	        $('.text-submit').css('height', (tarHeight) + "px");
+	        $('.conversationSection').css('height', ($('.text-history').height() - $('.text-submit').height()) + 'px');
 	    }
 	} else {
 		ele.style.height = "14px";
     	$('.text-submit').css('height', "30px");
+    	$('.conversationSection').css('height', ($('.text-history').height() - $('.text-submit').height()) + 'px');
 	}
 }
 
