@@ -129,7 +129,7 @@ function runSocket() {
 				$('#conversationSection h3').remove();
 			});
 		}
-		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
+		$('#conversationTranscript').append($('<li class="transcribed">').append($(msg)));
 	});
 
 	socket.on('startChat', function (roomObject, otherUserLocationData) {
