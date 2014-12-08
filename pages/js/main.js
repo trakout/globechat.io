@@ -96,6 +96,7 @@ function runSocket() {
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
+			startSpeechRecognition();
 			loadChatRoom(shared);
 		});
 	}
@@ -144,7 +145,7 @@ function runSocket() {
 		$('#conversationSection').show();
 
 		startOpenTok(roomObject, otherUserLocationData);
-		startSpeechRecognition();
+		// startSpeechRecognition();
 	});
 
 	socket.on('receiveChatRequest', function (userObject) {
