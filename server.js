@@ -367,10 +367,14 @@ function universalTranslator(fromLang, toLang, msg, callback) {
         if (err) {
             return console.log(err);
         }
-        var info = JSON.parse(body);
-        console.log(info);
-        console.log(info.text);
-        callback(info.text[0]);
+        try {
+            var info = JSON.parse(body);
+            console.log(info);
+            console.log(info.text);
+            callback(info.text[0]);
+        } catch (e) {
+            console.log(e+': '+ body);
+        }
     });
 }
 

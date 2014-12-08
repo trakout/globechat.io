@@ -208,26 +208,6 @@ function runSocket() {
 		$('#chatRequests').empty();
 	});
 
-	function requestToChatWithUser(userId) {
-		socket.emit('sendChatRequest', userId);
-	}
-
-	function acceptChatRequest(userId) {
-		socket.emit('acceptChatRequest', userId);
-	}
-
-	function sendTranscribedText(text) {
-		socket.emit('transcribedText', text);
-	}
-
-	function changeUserLanguage(language) {
-		socket.emit('changeUserLanguage', language);
-	}
-
-	function closeConversation() {
-		socket.emit('endConversation');
-	}
-
 	// function sendCandidateEvent(event) {
 	// 	socket.emit('sendCandidateEvent', {
 	// 		type: 'candidate',
@@ -243,6 +223,26 @@ function runSocket() {
 	// }
 } // runSocket
 
+function requestToChatWithUser(userId) {
+	socket.emit('sendChatRequest', userId);
+}
+
+function acceptChatRequest(userId) {
+	socket.emit('acceptChatRequest', userId);
+}
+
+function sendTranscribedText(text) {
+	socket.emit('transcribedText', text);
+}
+
+function changeUserLanguage(language) {
+	socket.emit('changeUserLanguage', language);
+}
+
+function closeConversation() {
+	socket.emit('endConversation');
+}
+	
 function getListOfOnlineUsers() {
 	socket.emit('onlineUsers');	
 }
