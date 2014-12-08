@@ -6,3 +6,4 @@ node_modules
 .sass-cache
 npm-debug.log
 config.json
+logs/*
