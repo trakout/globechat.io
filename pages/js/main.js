@@ -238,8 +238,6 @@ function loadChatRoom(otherUserLocationData) {
 			});
 			$('body').fadeIn('fast');
 
-			console.log(useThis);
-
 			loadDrawer(useThis);
 			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
@@ -256,7 +254,10 @@ function sendString(val) {
 	socket.emit('chatMessage', val);
 }
 
-function loadDrawer(val) {
+function loadDrawer(ughghghgh) {
+	var val = ughghghgh;
+
+	console.log(val);
 	$('.drawer .location .city').html(val.city);
 	$('.drawer .location .country').html(val.country);
 	$('.drawer .location .time').html(val.city);
