@@ -1,4 +1,4 @@
-var publisher, session, apiKey, socket, imageCount = 0;
+var publisher, session, apiKey, socket, imageCount = 0, shared;
 
 function runSocket() {
 	$('#conversationSection').hide();
@@ -79,6 +79,8 @@ function runSocket() {
 
 	function startOpenTok(roomObject, otherUserLocationData) {
 
+		shared = otherUserLocationData;
+
 		apiKey = "45102212";
 		session = OT.initSession(apiKey, roomObject.id);
 
@@ -93,7 +95,7 @@ function runSocket() {
 			// publisher = OT.initPublisher(apiKey, 'videoPublish');
 			// session.publish(publisher);
 			// moved to loadChatRoom
-			loadChatRoom(otherUserLocationData)
+			loadChatRoom(shared);
 		});
 	}
 
@@ -132,7 +134,7 @@ function runSocket() {
 				$('#conversationSection h3').remove();
 			});
 		}
-		$('#conversationTranscript').append($('<li class="transcribed">').text(msg));
+		$('#conversationTranscript').append($('<li class="transcribed">').append($(msg)));
 	});
 
 	socket.on('startChat', function (roomObject, otherUserLocationData) {
@@ -235,6 +237,9 @@ function runSocket() {
 
 function loadChatRoom(otherUserLocationData) {
 	console.log('loading');
+	var useThis = otherUserLocationData;
+
+	console.log(useThis);
 	$('body').fadeOut('fast', function() {
 		$('body').load('/chat.html .chat-parent', function() {
 			publisher = OT.initPublisher(apiKey, 'videoSelfie');
@@ -247,7 +252,7 @@ function loadChatRoom(otherUserLocationData) {
 			});
 			$('body').fadeIn('fast');
 
-			loadDrawer(otherUserLocationData);
+			loadDrawer(useThis);
 			// $('.drawer .location').html(otherUserLocationData);
 			checkDom();
 		});
@@ -263,19 +268,22 @@ function sendString(val) {
 	socket.emit('chatMessage', val);
 }
 
-function loadDrawer(val) {
+function loadDrawer(ughghghgh) {
+	var val = JSON.parse(ughghghgh);
+
+	console.log(val);
 	$('.drawer .location .city').html(val.city);
 	$('.drawer .location .country').html(val.country);
 	$('.drawer .location .time').html(val.city);
 
 	$('.drawer .weather .icon').html('<img src="' + val.icon + '" />');
-	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' &#176;C <br>' + val.weather);
+	$('.drawer .weather .temp').html(Math.round(val.temperature) + ' <span class="helv">&#176;</span>C <br>' + val.weather);
 
 	var d = new Date(val.local_time);
 	var m = d.getMinutes();
 	var h = d.getHours();
 
-	$('.drawer .time').html('Their local time is: <br>' + m + ':' + h);
+	$('.drawer .time').html('Local Time: <br>' + m + ':' + h);
 
 } // loadDrawer
 

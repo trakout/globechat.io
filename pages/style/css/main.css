@@ -2637,6 +2637,10 @@ ul.thumb li {
   overflow: hidden;
 }
 
+span.helv {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 ul#conversationTranscript {
   padding: 10px 14px;
   list-style: none;
